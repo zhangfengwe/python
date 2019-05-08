@@ -30,6 +30,9 @@
         max() 序列最大值
         min() 序列最小值
         list(字符串) 将字符串转换为对应列表
+    切片赋值
+        可实现序列的无序插入和删除，将切片替换为长度不同的序列
+    列表方法
 '''
 str = 'Hello'
 str2 = ['H', 'e', 'l', 'l', 'o']
@@ -78,6 +81,14 @@ print(''.join(list(str)))
 '''删除列表中的某个元素
 del str2[1]
 print(str2)
+'''
+'''切片赋值
+实现序列插入
+number[5:5] = list(str)
+print(number)
+实现序列删除
+number[2:5] = []
+print(number)
 '''
 
 
