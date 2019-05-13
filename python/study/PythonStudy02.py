@@ -32,6 +32,7 @@
         list(字符串) 将字符串转换为对应列表
     列表方法
         append()追加，修改原序列
+        clear()清空列表内容
 '''
 str = 'Hello'
 str2 = ['H', 'e', 'l', 'l', 'o']
@@ -89,6 +90,14 @@ print(number)
 number[2:5] = []
 print(number)
 '''
+'''
+列表方法
+append()只能添加一个元素
+clear()清空列表内容
+'''
+number.append(str2)
+print(number)
+print(number.clear())
 
 
 
