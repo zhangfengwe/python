@@ -2,6 +2,7 @@
 '''
     1、元组
         a、不可修改
+        用逗号相隔，只有一个值时，也要在后面加上逗号
     2、列表
         a、可修改
         基础列表操作：
@@ -30,6 +31,7 @@
         max() 序列最大值
         min() 序列最小值
         list(字符串) 将字符串转换为对应列表
+        tuple()将序列转化为元组
     列表方法
         append()追加，修改原序列
         clear()清空列表内容
@@ -55,6 +57,8 @@ number = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 num = [1, 3, 5, 7, 9]
 str3 = ['aardvark', 'abalone', 'acme', 'add', 'aerate']
 str4 = ['3','2','5','4','9','7']
+tup1 = (1,2,3)
+tup2 = 4,
 '''
 列表切片
 print(str[1])
@@ -131,8 +135,9 @@ num.reverse()
 print(num)
 str4.sort()
 print(str4)
+'''
 str3.sort(key=len)
 print(str3)
-'''
+print(tuple(str))
 
 
