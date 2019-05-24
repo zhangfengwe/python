@@ -8,7 +8,7 @@
         dict(),通过其他映射或者键值对序列创建字典,或者是关键字参数，类似于list,tuple,str是一个类
         类似于序列，存在len(),d[key],d[key]=value,del d[key],key in d 等操作
         clear() 清空字典，就地执行，返回值为None
-        copy() 浅拷贝，副本的值不影响原本，使用copy模块的deecopy()执行深拷贝，有疑惑，在DirCopy.py中解决
+        copy() 浅复制，副本的值不影响原本，使用copy模块的deecopy()执行深复制，有疑惑，在DirCopy.py中解决
         fromkeys(keys[,values]) 通过keys创建一个字典，值默认为None
         get(key[,defaultValue]) 通过key获取字典中对应值，字典中无该key时，会返回默认值None(可自行设置)，
             d[key]当key不存在时，会触发异常
