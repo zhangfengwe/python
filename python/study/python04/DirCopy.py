@@ -1,6 +1,7 @@
 #字典的浅复制和深复制
 '''
-
+    copy()浅复制
+    deepcopy()深复制
 '''
 from copy import deepcopy
 x = {'username': 'admin', 'machines': ['foo', 'bar', 'baz']}
