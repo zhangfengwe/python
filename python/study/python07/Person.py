@@ -10,6 +10,10 @@ class Person(Peo):
     __name = ''
     age = 0
     flag = 0
+
+    def __init__(self):
+        self.name = Person.__name__
+
     def talk(self):
         print('person talk........')
 
