@@ -10,7 +10,6 @@ import sys
 from Person import *
 # from Person import
 
-
 person = Person()
 person2 = Person()
 # print(person.name)
@@ -29,4 +28,5 @@ print(issubclass(Man,Person))#判断是否为子类
 print(getattr(man,'flag'))
 setattr(person,'name','zhang')
 print(getattr(person,'name'))
+
 
