@@ -12,6 +12,11 @@ class TestClass:
 def main():
     TestClass.clssMethod()
     TestClass.staticMethod()
+    a = 2
+    b = 3
+    a , b = b , a + b
+    print(a)
+    print(b)
 
 if __name__ == '__main__':
     main()
