@@ -38,9 +38,6 @@ def main():
     nested2 = ['foo', ['bar', ['baz']]]
     li2 = list(flatten(nested2))
     print(li2)
-    nested3 = 'assssss'
-    li3 = list(flatten(nested3))
-    print(li3)
 
 if __name__ == '__main__':
     main()
