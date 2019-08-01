@@ -7,8 +7,8 @@ class Peo(ABC):
 
 class Person(Peo):
 
-    __name = ''
-    age = 0
+    # __name = ''
+    # age = 0
     flag = 0
 
     def __init__(self):
@@ -17,17 +17,23 @@ class Person(Peo):
     def talk(self):
         print('person talk........')
 
-    def getName(self):
-        return self.name
+    '''
+        修改get,set方法，使用@property进行优化
+    '''
+    @property
+    def name(self):
+        return self._name
 
-    def setName(self,name):
-        self.name = name
+    @name.setter
+    def name(self,name):
+        self._name = name
 
-    def getAge(self):
-        return self.age
-
-    def setAge(self,age):
-        self.age = age
+    @property
+    def age(self):
+        return self._age
+    @age.setter
+    def age(self,age):
+        self._age = age
 
     def ageAdd(self):
         self.age += 1
