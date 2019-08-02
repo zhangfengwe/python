@@ -28,7 +28,7 @@ def writeFile(file,content):
     '''
     num = 0
     try:
-        with open(file,'w',encoding='utf-8') as f:
+        with open(file, 'w', encoding='utf-8') as f:
             for line in content:
                 num += f.write(line)
                 num += f.write('\n')
@@ -38,7 +38,7 @@ def writeFile(file,content):
 
 def iterFile(file):
     try:
-        for line in open(file,encoding='utf-8'):
+        for line in open(file, encoding='utf-8'):
             print(line.strip())
     except Exception as e:
         print(e)
