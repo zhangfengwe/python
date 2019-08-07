@@ -5,8 +5,9 @@
     字典，按照名称进行赋值，SQL中使用:no进行定位（no为字典中的key）
 '''
 
-import cx_Oracle
-import os
+# import cx_Oracle
+# import os
+from python.study.python13 import *
 
 # 设置Oracle字符编码
 os.environ['NLS_LANG'] = 'AMERICAN_AMERICA.ZHS16GBK'
