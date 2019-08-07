@@ -10,12 +10,18 @@
 from python.study.python13 import *
 
 # 设置Oracle字符编码
-os.environ['NLS_LANG'] = 'AMERICAN_AMERICA.ZHS16GBK'
+os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.ZHS16GBK'
 
 
 def con():
+    # 设置SQL语句的参数风格
+    # 参数格式有：format 即‘%s’标准字符串格式设置方式
+    #            pyformat 扩展的格式编码
+    #            qmark  使用问号
+    #            numeric 使用:1的形式
+    #            named 使用:no的形式
     cx_Oracle.paramstyle = 'numeric'
-    conn = cx_Oracle.connect('xlink/xlink@127.0.0.1:1521/HKXLINK')
+    conn = cx_Oracle.connect('xlink/942640@127.0.0.1:1521/HKXLINK')
     curs = conn.cursor()
 
     return conn, curs
@@ -78,12 +84,22 @@ def main():
     try:
         print(cx_Oracle.paramstyle)
         conn, curs = con()
+        # 查询
         # result = select(curs,'''''')
         # for line in result:
         #     print(result)
-        insert_sql = 'insert into respcode_map(respcode_transmit,channel_transmit,respcode,txstatus,message,flag)' \
-                    'values(:1, :2, :3, :4, :5, :6)'
-        insert(conn, curs, ('123', 'ESB', 'a', 'b', '11', '1'), insert_sql)
+        # 插入
+        # insert_sql = 'insert into respcode_map(respcode_transmit,channel_transmit,respcode,txstatus,message,flag)' \
+        #             'values(:1, :2, :3, :4, :5, :6)'
+        # rows = insert(conn, curs, ('123', 'ESB', 'a', 'b', '11', '1'), insert_sql)
+        # 修改
+        # update_sql = 'update respcode_map set respcode = :1 WHERE respcode_transmit = :2'
+        # rows = update(conn,curs,('错误', '123'),update_sql)
+        # 删除
+        delete_sql = 'delete from respcode_map WHERE respcode_transmit = :1'
+        rows = delete(conn,curs,('123',), delete_sql)
+        print('受影响行数为{}'.format(rows))
+        print(cx_Oracle.paramstyle)
     except (ValueError,Exception) as e:
         print(e)
         conn.rollback()
