@@ -2,17 +2,25 @@
 
 # import urllib
 from urllib.request import urlopen
-import python_file as fil
+from urllib.request import urlretrieve
+import python.study.python11.python_file as fil
 
 
 def open_url(url, file):
     data = urlopen(url)
-    for line in data.readlines():
-        fil.writeFile(file, line)
+    print(data)
+    openconf = dict(mode='ab+',breflag='N')
+    num = fil.writeFile(file,data,openconf)
+    return num
+
+def open_urlretrieve(url, file):
+    result = urlretrieve(url, file)
+    return result
 
 
 def main():
-    open_url('http://www.baidu.com', 'test1.txt')
+    # print(open_url('http://www.baidu.com', 'test1.html'))
+    print(open_urlretrieve('http://www.baidu.com', 'baidu.html'))
 
 if __name__ == '__main__':
     main()
