@@ -29,11 +29,20 @@ def create_table(conn, curs, sqls=[]):
 
 
 def insert_table(conn, curs, sqls=[]):
+    '''
+    插入
+    :param conn:
+    :param curs:
+    :param sqls: 列表每一项为一个元组，第一个元素为SQL，第二个元素为值
+    :return:
+    '''
     if len(sqls) == 0:
         raise ValueError('SQL is null')
     else:
         for sql, value in sqls:
-            curs.execute(sql, value)
+            # print(sql)
+            # print(value)
+            curs.executemany(sql, value)
         conn.commit()
 
 
@@ -48,13 +57,16 @@ def select(curs, sql=''):
 def main():
     conn, curs = con()
     # create_table(conn, curs, ['CREATE TABLE test_table_2 ( id TEXT PRIMARY KEY, desc TEXT)'])
-    # insert_sqls = []
-    # insert_sql_1 = 'insert into test_table VALUES (:1, :2)'
-    # insert_value_1 = ('1', '一')
-    # insert_value_2 = ('2', '二')
-    # insert_sqls.append((insert_sql_1, insert_value_1))
+    insert_sqls = []
+    insert_sql_1 = 'insert into test_table VALUES (:1, :2)'
+    insert_value_1 = ('3', '一')
+    insert_value_2 = ('4', '二')
+    insert_values = []
+    insert_values.append(insert_value_1)
+    insert_values.append(insert_value_2)
+    insert_sqls.append((insert_sql_1, insert_values))
     # insert_sqls.append((insert_sql_1, insert_value_2))
-    # insert_table(conn, curs, insert_sqls)
+    insert_table(conn, curs, insert_sqls)
     result = select(curs, 'select * from test_table')
     for line in result:
         print(line)
