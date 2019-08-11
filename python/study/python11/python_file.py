@@ -1,5 +1,7 @@
 # 文件操作
 
+from python.study.python11 import traceback
+
 def readFile(file,len):
     '''
     读取指定长度的文件内容，长度为0时代表读取全部
@@ -15,25 +17,31 @@ def readFile(file,len):
             else:
                 li.append(f.read(len))
     except Exception as e:
-        print(e)
+        traceback.print_exc()
     finally:
         return li
 
-def writeFile(file,content):
+
+def writeFile(file,content,openconf={'mode':'a+','encoding':None, 'breflag':'Y'}):
     '''
     将文件内容写入文件中
     :param file:
     :param content:
+    :param openconf:存放打开文件参数
+                {mode:'a+',encoding:'utf-8'}
+    :type openconf:dict
     :return:
     '''
     num = 0
     try:
-        with open(file, 'w', encoding='utf-8') as f:
+        with open(file, openconf.get('mode'), encoding=openconf.get('encoding')) as f:
             for line in content:
                 num += f.write(line)
-                num += f.write('\n')
+                if openconf.get('breflag') == 'Y':
+                    num += f.write('\n')
             return num
     except Exception as e:
+        traceback.print_exc()
         return -1
 
 def iterFile(file):
@@ -50,7 +58,7 @@ def main():
     for i in range(len(li)):
         print(li[i].strip())
     content = ['hello,李四,python','the python file test','and file write']
-    print(writeFile(file,content))
+    print(writeFile(file,content,'a'))
 
     iterFile(file)
 
