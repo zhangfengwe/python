@@ -20,7 +20,7 @@ def open_urlretrieve(url, file):
 
 def main():
     # print(open_url('http://www.baidu.com', 'test1.html'))
-    print(open_urlretrieve('http://www.baidu.com', 'baidu.html'))
+    print(open_urlretrieve('https://www.taobao.com/', 'test2.html'))
 
 if __name__ == '__main__':
     main()
