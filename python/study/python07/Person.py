@@ -11,6 +11,9 @@ class Person(Peo):
     # age = 0
     flag = 0
 
+    # 限定自定义对象只能设置某些属性，只对当前类有效
+    __slots__ = ('_name', '_age')
+
     def __init__(self):
         self.name = Person.__name__
 
