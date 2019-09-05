@@ -1,9 +1,12 @@
 # 测试类
 from abc import ABC,abstractmethod
+
+
 class Peo(ABC):
     @abstractmethod
     def talk(self):
         print('talk ........')
+
 
 class Person(Peo):
 
@@ -15,7 +18,8 @@ class Person(Peo):
     __slots__ = ('_name', '_age')
 
     def __init__(self):
-        self.name = Person.__name__
+        self._name = Person.__name__
+        self._age = 0
 
     def talk(self):
         print('person talk........')
@@ -28,14 +32,15 @@ class Person(Peo):
         return self._name
 
     @name.setter
-    def name(self,name):
+    def name(self, name):
         self._name = name
 
     @property
     def age(self):
         return self._age
+
     @age.setter
-    def age(self,age):
+    def age(self, age):
         self._age = age
 
     def ageAdd(self):
@@ -43,6 +48,7 @@ class Person(Peo):
 
     def changeFlag(self):
         Person.flag += 1
+
 
 class Man(Person):
     def changeFlag(self):

@@ -1,6 +1,6 @@
 # 异常
 
-from MySelfException import MyException
+from python.study.python08.MySelfException import MyException
 '''
 raise 引发异常
 try/except 捕获异常
