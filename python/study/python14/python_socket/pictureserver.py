@@ -6,6 +6,7 @@ from socket import socket
 from json import dumps
 from base64 import b64encode
 from time import sleep
+from os import path
 
 class TransPictureServer(Thread):
 
@@ -14,11 +15,14 @@ class TransPictureServer(Thread):
         self._client = cclient
 
     def run(self):
-        my_dict = {}
-        my_dict['filename'] = self._client.recv(1024).decode('gbk')
-        file = open(my_dict['filename'],'rb')
-        data = b64encode(file.read()).decode('gbk')
+        my_dict = dict()
+        filename = self._client.recv(1024).decode('gbk')
+        if not path.isfile(filename):
+            raise FileNotFoundError('文件不存在')
+        with open(filename,'rb') as file:
+            data = b64encode(file.read()).decode('gbk')
         my_dict['filedata'] = data
+        # 将字典转换为json字符串
         json_str = dumps(my_dict)
         self._client.send(json_str.encode('gbk'))
         sleep(10)
@@ -31,6 +35,7 @@ def main():
     server = socket()
     server.bind(('127.0.0.1', 9002))
     server.listen(512)
+    server.settimeout(5)
     print('服务器启动开始监听。。。。')
 
 
