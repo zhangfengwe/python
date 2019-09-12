@@ -20,7 +20,7 @@ def open_urlretrieve(url, file):
 
 
 def main():
-    print(open_url('https://blog.csdn.net/u012232730/article/details/71078284', 'test3.html'))
+    print(open_url('https://www.ivsky.com/bizhi/the_angry_birds_movie_v57732/pic_904679.html#al_tit', 'test3.html'))
     # print(open_urlretrieve('https://blog.csdn.net/u012232730/article/details/71078284', 'test3.html'))
 
 if __name__ == '__main__':
