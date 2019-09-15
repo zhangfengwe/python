@@ -8,6 +8,7 @@
 # import cx_Oracle
 # import os
 from python.study.python13 import *
+from python.study.other.config.readconfig import MyConfig
 
 # 设置Oracle字符编码
 os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.ZHS16GBK'
@@ -20,8 +21,16 @@ def con():
     #            qmark  使用问号
     #            numeric 使用:1的形式
     #            named 使用:no的形式
+    user = MyConfig.get_value('database', 'user')
+    password = MyConfig.get_value('database', 'password')
+    server = MyConfig.get_value('database', 'host')
+    port = MyConfig.get_value('database', 'port')
+    dbname = MyConfig.get_value('database', 'dbname')
     cx_Oracle.paramstyle = 'numeric'
-    conn = cx_Oracle.connect('xlink/942640@127.0.0.1:1521/HKXLINK')
+    # 使用tns连接
+    oracle_tns = cx_Oracle.makedsn(server, int(port), dbname)
+    conn = cx_Oracle.connect(user, password, oracle_tns)
+    # conn = cx_Oracle.connect('xlink/942640@127.0.0.1:1521/HKXLINK')
     curs = conn.cursor()
 
     return conn, curs
