@@ -20,7 +20,7 @@ class FinalLogger:
     level = levels.get(MyConfig.get_value('logger', 'log_level'))
     max_size = int(MyConfig.get_value('logger', 'log_max_size'))
     backup_count = int(MyConfig.get_value('logger', 'log_backup_count'))
-    log_format = '%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s'
+    log_format = '%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: <%(message)s>'
 
     @staticmethod
     def getLogger():
