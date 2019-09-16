@@ -7,7 +7,7 @@
 '''
 import sys
 # sys.path.append(r'D:\project\python\python\study\python07\Person.py')
-from Person import *
+from python.study.python07.Person import Person, Man
 # from Person import
 
 person = Person()
