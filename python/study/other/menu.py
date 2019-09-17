@@ -1,4 +1,5 @@
 # 菜单显示类
+# 后续修改为读取功能文件，获取菜单
 
 import python.study.other.yinghua as yin
 
@@ -9,7 +10,7 @@ class menu:
 
     def __init__(self, lists):
         '''
-        菜单类初始话
+        菜单类初始化
         :param lists: 每一项为一个字典,{index:1,desc:'测试功能',obj:A,method:'func'}
         :type lists:list
         '''

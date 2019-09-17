@@ -2,6 +2,8 @@
 
 import logging.handlers
 from python.study.other.config.readconfig import MyConfig
+from os import path, makedirs
+
 
 class FinalLogger:
 
@@ -15,8 +17,13 @@ class FinalLogger:
         'critical': logging.CRITICAL
     }
 
-
-    filename = MyConfig.get_value('logger','log_file')
+    filename = MyConfig.get_value('logger', 'log_file')
+    # 根据完整文件路径获取文件目录
+    # path.dirname 获取文件目录
+    # path.basename 获取文件名
+    file_path = path.dirname(filename)
+    if not path.exists(file_path):
+        makedirs(file_path)
     level = levels.get(MyConfig.get_value('logger', 'log_level'))
     max_size = int(MyConfig.get_value('logger', 'log_max_size'))
     backup_count = int(MyConfig.get_value('logger', 'log_backup_count'))
