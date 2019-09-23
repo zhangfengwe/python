@@ -4,7 +4,7 @@ from python.study.other.config import reconfig,logger
 import re
 import traceback
 
-loger = logger.FinalLogger.getLogger()
+loger = logger.Logger().get_logger()
 
 def check_phone(phone):
     '''

@@ -1,6 +1,6 @@
 # 测试使用
 
-from python.study.other.config import loggerSingleton as log
+from python.study.other.config.logger import Logger
 
 
 def add(a, b):
@@ -8,7 +8,7 @@ def add(a, b):
 
 
 if __name__ == '__main__':
-    logger = log.Logger().get_logger()
+    logger = Logger().get_logger()
     logger.info('add start')
     logger.info('result is {}'.format(add(23, 41)))
     logger.info('add finish')
