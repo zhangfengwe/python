@@ -15,7 +15,8 @@ class MyConfig:
         CONFIG_PATH = con.CONFIG_PATH
         if not CONFIG_PATH:
             raise FileNotFoundError
-
+    # 读取使用绝对路径
+    # 在其他模块中使用时，使用相对路径会读取失败
     config.read(CONFIG_PATH)
 
     @staticmethod
