@@ -8,12 +8,17 @@
 import unittest
 from python.study.practice.python02 import my_math
 from timeit import timeit
+from python.study.other.config.logger import Logger
 
 
 class ProductTest(unittest.TestCase):
 
+    logger = Logger().get_logger()
+
     def test_add(self):
+        self.logger.info('start test_add')
         print(my_math.add(13, '24'))
+        self.logger.info('finish test_add')
 
     def test_add_time(self):
         print(timeit(stmt='my_math.add(a, b)', setup='from python.study.practice.python02 import my_math;a=2;b=3'))

@@ -49,7 +49,9 @@ class Logger():
 
     def get_logger(self):
         logger = logging.Logger('FinalLogger')
-        log_handler = logging.handlers.TimedRotatingFileHandler(filename=self.filename, when='D',backupCount=self.backup_count)
+        # MIDNIGHT每天凌晨切换文件
+        log_handler = logging.handlers.TimedRotatingFileHandler(filename=self.filename, when='MIDNIGHT',
+                                                                backupCount=self.backup_count)
         log_handler.setFormatter(logging.Formatter(self.log_format))
         logger.addHandler(log_handler)
         logger.setLevel(self.level)
