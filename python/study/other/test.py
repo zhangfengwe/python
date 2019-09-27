@@ -9,6 +9,7 @@ import unittest
 from python.study.practice.python02 import my_math
 from timeit import timeit
 from python.study.other.config.logger import Logger
+import re
 
 
 class ProductTest(unittest.TestCase):
@@ -22,6 +23,9 @@ class ProductTest(unittest.TestCase):
 
     def test_add_time(self):
         print(timeit(stmt='my_math.add(a, b)', setup='from python.study.practice.python02 import my_math;a=2;b=3'))
+
+    def test_re(self):
+        print(re.match(r'(18|19|([23]\d))[0-9]{2}', '3900'))
 
 if __name__ == '__main__':
     # unittest.main()自动执行所有子类中以test开头的方法
