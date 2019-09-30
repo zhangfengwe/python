@@ -12,7 +12,9 @@ def main():
     # example_3()
     # test()
     # example_4()
-    example_5()
+    # example_5()
+    # example_6()
+    example_7()
 
 
 def example_1():
@@ -94,6 +96,53 @@ def example_5():
 
     fig.savefig('example_5')
     plt.show()
+
+
+def example_6():
+    np.random.seed(1345)
+    n_bins = 10
+    x = np.random.randn(1000, 3)
+
+    fig, axes = plt.subplots(ncols=2, nrows=2)
+    ax0, ax1, ax2, ax3 = axes.flatten()
+
+    colors = ['red', 'tan', 'lime']
+
+    ax0.hist(x, n_bins, density=True, histtype='bar', color=colors, label=colors)
+    ax0.legend(prop={'size': 10})
+    ax0.set_title('bars with legend')
+
+    ax1.hist(x, n_bins, density=True, histtype='barstacked')
+    ax1.set_title('stacked bar')
+
+    ax2.hist(x, histtype='barstacked', rwidth=0.9)
+
+    # x[:, 0] 用于处理多维数组，矩阵，即x[:, m:n],获取所有数据的m到n-1列的数据，包左不包右
+    ax3.hist(x[:, 0], rwidth=0.9)
+    ax3.set_title('different simple sizes')
+
+    fig.tight_layout()
+    fig.savefig('example_6')
+    plt.show()
+
+
+def example_7():
+    labels = ['a', 'b', 'c', 'd']
+    sizes = [15, 30, 45, 10]
+    # 突出饼图的某一块
+    explode = (0, 0.1, 0.05, 0)
+
+    fig, (ax1, ax2) = plt.subplots(2)
+    ax1.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=True)
+    ax1.axis('equal')
+
+    ax2.pie(sizes, autopct='%1.2f%%', shadow=True, startangle=90, explode=explode, pctdistance=1.12)
+    ax2.axis('equal')
+    ax2.legend(labels=labels, loc='upper right')
+
+    fig.savefig('example_7')
+    plt.show()
+
 
 
 def test():
