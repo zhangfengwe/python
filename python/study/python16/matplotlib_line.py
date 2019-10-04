@@ -7,13 +7,13 @@ import numpy as np
 
 
 def main():
-    # example_1()
-    # example_2()
-    # example_3()
+    example_1()
+    example_2()
+    example_3()
     # test()
-    # example_4()
-    # example_5()
-    # example_6()
+    example_4()
+    example_5()
+    example_6()
     example_7()
 
 

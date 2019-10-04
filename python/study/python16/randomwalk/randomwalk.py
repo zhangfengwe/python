@@ -13,7 +13,7 @@ class RandomWalk():
 
     def fill_walk(self):
 
-        while len(self.x_values) <= self.num_points:
+        while len(self.x_values) < self.num_points:
 
             x_direction = choice([-1, 1])
             x_distance = choice([0, 1, 2, 3, 4])
@@ -36,9 +36,10 @@ class RandomWalk():
 def make_random_walk():
     rw = RandomWalk()
     rw.fill_walk()
+    point_num = list(range(rw.num_points))
 
     fig, ax = plt.subplots()
-    ax.scatter(rw.x_values, rw.y_values, color='red')
+    ax.scatter(rw.x_values, rw.y_values, c=point_num, cmap=plt.cm.Blues, edgecolor='none', s=15)
     fig.savefig('random_walk_1')
     plt.show()
 
