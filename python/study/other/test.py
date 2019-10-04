@@ -10,6 +10,8 @@ from python.study.practice.python02 import my_math
 from timeit import timeit
 from python.study.other.config.logger import Logger
 import re
+import time
+from time import  sleep
 
 
 class ProductTest(unittest.TestCase):
@@ -26,6 +28,15 @@ class ProductTest(unittest.TestCase):
 
     def test_re(self):
         print(re.match(r'(18|19|([23]\d))[0-9]{2}', '3900'))
+
+    def test_logger_dayli(self):
+        while True:
+            self.logger.info('当前时间{}, 睡眠{}'.format(time.strftime('%Y%m%d', time.localtime()), 10000))
+            sleep(10000)
+            if time.strftime('%Y%m%d', time.localtime()) == '20190928':
+                self.logger.info('当前时间{}'.format(time.strftime('%Y%m%d', time.localtime())))
+                break
+
 
 if __name__ == '__main__':
     # unittest.main()自动执行所有子类中以test开头的方法
