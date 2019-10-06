@@ -120,7 +120,7 @@ def example_6():
     # x[:, 0] 用于处理多维数组，矩阵，即x[:, m:n],获取所有数据的m到n-1列的数据，包左不包右
     ax3.hist(x[:, 0], rwidth=0.9)
     ax3.set_title('different simple sizes')
-
+    # 自动调整子图参数，使之填充整个图像区域
     fig.tight_layout()
     fig.savefig('example_6')
     plt.show()
