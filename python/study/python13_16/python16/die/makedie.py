@@ -6,7 +6,11 @@ import matplotlib.pyplot as plt
 from python.study.python13_16.python16.die.die import Die
 
 # 标题中文显示为方框解决办法
-chinfo = matplotlib.font_manager.FontProperties(fname='C:/Windows/Fonts/msyh.ttc')
+# 第一种
+chinfo = matplotlib.font_manager.FontProperties(fname='C:/Windows/Fonts/simsun.ttc')
+# 第二种
+matplotlib.rcParams['font.sans-serif'] = [u'SimHei']
+matplotlib.rcParams['axes.unicode_minus'] = False
 
 
 def make_data_D6():
@@ -41,7 +45,7 @@ def make_data_d6_add(*die_sides, roll_num=1000):
         results.append(result)
 
     frequencies = []
-    for added in range(2, die1.num_sides + die2.num_sides +1):
+    for added in range(2, die1.num_sides + die2.num_sides + 1):
         frequency = results.count(added)
         frequencies.append(frequency)
     return frequencies
@@ -52,6 +56,7 @@ def show_data(x, y, pic_name, title):
 
     ax.bar(x, y, color='lightblue', align='center')
     ax.set_title(title, fontproperties=chinfo)
+    # ax.set_title(title)
     # 设置x轴的刻度间隔为1
     ax.xaxis.set_major_locator(plt.MultipleLocator(1))
     fig.savefig(pic_name)
@@ -60,6 +65,6 @@ def show_data(x, y, pic_name, title):
 
 if __name__ == '__main__':
     frequencies = make_data_D6()
-    show_data(range(1,7), frequencies, 'die_d6', '点数出现次数统计')
+    show_data(range(1, 7), frequencies, 'die_d6', '点数出现次数统计')
     frequencies2 = make_data_d6_add(6, 6, roll_num=1000)
-    show_data(range(2,13), frequencies2, 'die_d6_add', '点数之和次数统计')
+    show_data(range(2, 13), frequencies2, 'die_d6_add', '点数之和次数统计')
