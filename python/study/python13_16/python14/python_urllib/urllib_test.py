@@ -3,7 +3,7 @@
 # import urllib
 from urllib.request import urlopen
 from urllib.request import urlretrieve
-import python.study.python11.python_file as fil
+import python.study.python10_12.python_file as fil
 
 
 def open_url(url, file):
