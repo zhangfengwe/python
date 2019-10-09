@@ -2,7 +2,7 @@
 
 import sys
 import fileinput as fli
-#堆模块
+# 堆模块
 import heapq as head
 from random import shuffle
 from collections import deque

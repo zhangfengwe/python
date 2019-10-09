@@ -1,6 +1,6 @@
 # 文件操作
 
-from python.study.python11 import traceback
+import traceback
 
 
 def readFile(file, lenth):
@@ -23,7 +23,7 @@ def readFile(file, lenth):
         return li
 
 
-def writeFile(file,content,openconf={'mode':'a+','encoding':None, 'breflag':'Y'}):
+def writeFile(file, content, openconf={'mode': 'a+', 'encoding': None, 'breflag': 'Y'}):
     '''
     将文件内容写入文件中
     :param file:

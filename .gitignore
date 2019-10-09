@@ -5,3 +5,4 @@
 *.ini
 *.db
 __pycache__
+testfile

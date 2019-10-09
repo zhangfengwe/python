@@ -144,7 +144,6 @@ def example_7():
     plt.show()
 
 
-
 def test():
     data = [('apples', 2), ('oranges', 3), ('peaches', 1)]
     fruit, value = zip(*data)
