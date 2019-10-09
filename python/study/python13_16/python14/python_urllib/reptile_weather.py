@@ -5,6 +5,7 @@ import csv
 import matplotlib.pyplot as plt
 import matplotlib
 import python.study.other.util.fileutil as fileutil
+from python.study.other.config.logger import Logger
 
 matplotlib.rcParams['font.sans-serif'] = [u'SimHei']
 matplotlib.rcParams['axes.unicode_minus'] = False
@@ -12,6 +13,7 @@ matplotlib.rcParams['axes.unicode_minus'] = False
 header = ('Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 '
           '(KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36')
 kv = {'user-agent': header}
+logger = Logger().get_logger()
 
 
 def get_data(urls):
@@ -41,26 +43,25 @@ def get_data(urls):
 def get_city_url(url):
     file_path = 'matplot_data/citys_url_'
     if fileutil.is_live(file_path):
-
         response = requests.get(url, headers=kv)
         html = response.text
         soup = BeautifulSoup(html, 'html.parser')
-        city_div = soup.select('div[style="padding:10px 15px 20px 15px"]')
-        ul_list = city_div[0].select('ul')
-        print(len(ul_list))
+        city_div = soup.select_one('div[style="padding:10px 15px 20px 15px"]')
+        ul_list = city_div.select('ul')
         for ul in ul_list:
             first = ul.attrs.get('id')[-1:]
             with open(file_path + first.upper() + '.csv', 'w') as file:
                 li_list = ul.select('li')
-                str2 = ''
-                print(len(li_list))
+
                 for li in li_list:
-                    a_list = li.select('a')
-                    for a in a_list:
-                        if not a.attrs['href']:
-                            break
-                        str2 += a.attrs['href'] + ',' + a.string + '\n'
-                        file.write(str2)
+                    a = li.select_one('a')
+                    str2 = ''
+                    if a.attrs['href'] is '#':
+                        logger.warning('跳过#超链接，href为{}'.format(a.attrs['href']))
+                        continue
+                    str2 += a.attrs['href'] + ',' + a.string + '\n'
+                    logger.debug('str2 is {}'.format(str2))
+                    file.write(str2)
 
 
 
