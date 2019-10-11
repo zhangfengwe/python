@@ -29,6 +29,24 @@ class ProductTest(unittest.TestCase):
     def test_re(self):
         print(re.match(r'(18|19|([23]\d))[0-9]{2}', '3900'))
 
+    def test_str(self):
+        str2 = "if (this.value != '') window.location.href='http://lishi.tianqi.com/zhurihe/' + this.value + '.html';"
+        str2 = str2[str2.find('http://'):]
+        print(str2)
+        print(str2.rfind('\';'))
+        print(str2.find('\';'))
+        str2 = str2[:str2.rfind('\';')]
+        print(str2)
+        # strlist = str2.split('+')
+        # print(strlist)
+        # for str_sub in strlist:
+        #     if str_sub.find('=') != -1:
+        #         str_sub_list = str_sub.split('=')
+        #         for str_sub_s in str_sub_list:
+        #             print(str_sub_s.replace('\'', '').strip())
+
+
+
     def test_logger_dayli(self):
         while True:
             self.logger.info('当前时间{}, 睡眠{}'.format(time.strftime('%Y%m%d', time.localtime()), 10000))

@@ -41,8 +41,8 @@ def get_data(urls):
 
 
 def get_city_url(url):
-    file_path = 'matplot_data/citys_url_'
-    if fileutil.is_live(file_path):
+    file_path = 'matplot_data/city_url/citys_url_'
+    if fileutil.is_live(file_path, True):
         response = requests.get(url, headers=kv)
         html = response.text
         soup = BeautifulSoup(html, 'html.parser')
@@ -50,7 +50,7 @@ def get_city_url(url):
         ul_list = city_div.select('ul')
         for ul in ul_list:
             first = ul.attrs.get('id')[-1:]
-            with open(file_path + first.upper() + '.csv', 'w') as file:
+            with open(file_path + first.upper() + '.csv', 'w', encoding='GBK') as file:
                 li_list = ul.select('li')
 
                 for li in li_list:
@@ -62,7 +62,6 @@ def get_city_url(url):
                     str2 += a.attrs['href'] + ',' + a.string + '\n'
                     logger.debug('str2 is {}'.format(str2))
                     file.write(str2)
-
 
 
 def plt_show():
