@@ -5,26 +5,33 @@ import csv
 import matplotlib.pyplot as plt
 import matplotlib
 import python.study.other.util.fileutil as fileutil
+import python.study.other.util.strutil as strutil
 from python.study.other.config.logger import Logger
+import os
+from time import sleep
 
 matplotlib.rcParams['font.sans-serif'] = [u'SimHei']
 matplotlib.rcParams['axes.unicode_minus'] = False
 
-header = ('Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 '
-          '(KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36')
-kv = {'user-agent': header}
+
 logger = Logger().get_logger()
+
+
+def get_response_soup(url):
+    header = ('Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 '
+              '(KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36')
+    kv = {'user-agent': header}
+    response = requests.get(url, headers=kv)
+    html = response.text
+    soup = BeautifulSoup(html, 'html.parser')
+    return soup
 
 
 def get_data(urls):
 
     with open('matplot_data/wuhan_weather.csv', 'w') as file:
         for url in urls:
-            # request = urllib.request.Request(url)
-            response = requests.get(url, headers=kv)
-            html = response.text
-            html = html.encode('gbk')
-            soup = BeautifulSoup(html, 'html.parser')
+            soup = get_response_soup(url)
             weather_list = soup.select('div[class="tqtongji2"]')
 
             for weather in weather_list:
@@ -42,10 +49,8 @@ def get_data(urls):
 
 def get_city_url(url):
     file_path = 'matplot_data/city_url/citys_url_'
-    if fileutil.is_live(file_path, True):
-        response = requests.get(url, headers=kv)
-        html = response.text
-        soup = BeautifulSoup(html, 'html.parser')
+    if fileutil.is_dir_live(file_path, True):
+        soup = get_response_soup(url)
         city_div = soup.select_one('div[style="padding:10px 15px 20px 15px"]')
         ul_list = city_div.select('ul')
         for ul in ul_list:
@@ -62,6 +67,50 @@ def get_city_url(url):
                     str2 += a.attrs['href'] + ',' + a.string + '\n'
                     logger.debug('str2 is {}'.format(str2))
                     file.write(str2)
+
+
+def get_city_month_url(path):
+    # 爬取指定文件内的城市
+    if os.path.isfile(path):
+        check_city_url_csv(path)
+    # 爬取指定文件夹
+    elif os.path.isdir(path):
+        root, dirs, files = os.walk(path)
+        for file in files:
+            if fileutil.get_file_name(file, False)[1] != '.csv':
+                continue
+            check_city_url_csv(file)
+    else:
+        logger.error('{} is error'.format(path))
+
+
+def check_city_url_csv(path):
+    '''解析单个csv文件'''
+    with open(path, 'r', encoding='gbk') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            file_path = 'matplot_data/city_url_month/' + fileutil.get_file_name(path, False)[0][-1:] + '/'
+            fileutil.is_dir_live(file_path, True)
+            soup = get_response_soup(row[0])
+
+            # 存储历史天气路劲的文件名为 matplot_data/city_url_month/城市的首字母大写/城市中文名.csv
+            file_path += row[1] + '.csv'
+            select_label = soup.select_one('select[name=select]')
+            # 截取onchange中的url
+            url_month = strutil.split_str(select_label.attrs.get('onchange'), start='http://', end="';")
+            options = select_label.select('option')
+            with open(file_path, 'w') as result_file:
+                for option in options:
+                    strs = ''
+                    # 跳过默认option选项
+                    if not option.attrs['value']:
+                        continue
+                    month = option.attrs['value']
+                    strs += url_month.replace("' + this.value + '", month) + ',' + option.string + '\n'
+                    result_file.write(strs)
+            # 读取一个城市后，睡眠2秒
+            logger.info('{}数据爬取完毕，线程睡眠2秒'.format(row[1]))
+            sleep(2)
 
 
 def plt_show():
@@ -89,7 +138,13 @@ def plt_show():
     plt.show()
 
 
+def test_os():
+    print(os.path.isfile('matplot_data/wuhan_weather2.csv'))
+
+
 if __name__ == '__main__':
     # get_data(['http://lishi.tianqi.com/wuhan/201707.html'])
     # plt_show()
-    get_city_url('https://lishi.tianqi.com/')
+    # get_city_url('https://lishi.tianqi.com/')
+    # test_os()
+    get_city_month_url('matplot_data/city_url/citys_url__.csv')
