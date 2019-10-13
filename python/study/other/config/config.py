@@ -11,5 +11,7 @@ config['logger'] = {'LOG_LEVEL':'info', 'LOG_FILE':'/log/Python_Study.log', 'LOG
 
 config['database'] = {'user':'xlink', 'passord':'942640', 'host':'127.0.0.1', 'port':'5521', 'dbname':'HKXLINK'}
 
+config['path'] = {'base_path':'D:/python/'}
+
 with open('config.ini','w') as file:
     config.write(file)
