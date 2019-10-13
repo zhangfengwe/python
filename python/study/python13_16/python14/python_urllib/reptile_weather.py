@@ -8,7 +8,7 @@ import python.study.other.util.fileutil as fileutil
 import python.study.other.util.strutil as strutil
 from python.study.other.config.logger import Logger
 import os
-from time import sleep
+from time import sleep, time
 
 matplotlib.rcParams['font.sans-serif'] = [u'SimHei']
 matplotlib.rcParams['axes.unicode_minus'] = False
@@ -18,12 +18,15 @@ logger = Logger().get_logger()
 
 
 def get_response_soup(url):
+    start = time()
     header = ('Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 '
               '(KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36')
     kv = {'user-agent': header}
     response = requests.get(url, headers=kv)
     html = response.text
     soup = BeautifulSoup(html, 'html.parser')
+    end = time()
+    logger.info('request获取{}网页耗时{}'.format(url, end - start))
     return soup
 
 
@@ -75,23 +78,26 @@ def get_city_month_url(path):
         check_city_url_csv(path)
     # 爬取指定文件夹
     elif os.path.isdir(path):
-        root, dirs, files = os.walk(path)
-        for file in files:
-            if fileutil.get_file_name(file, False)[1] != '.csv':
-                continue
-            check_city_url_csv(file)
+        for root, dirs, files in os.walk(path):
+            logger.info('{}, {}, {}'.format(root, dirs, files))
+            for file in files:
+                if fileutil.get_file_name(root + file, False)[1] != '.csv':
+                    continue
+                check_city_url_csv(root + file)
     else:
         logger.error('{} is error'.format(path))
 
 
 def check_city_url_csv(path):
     '''解析单个csv文件'''
+    all_time = []
     with open(path, 'r', encoding='gbk') as file:
         reader = csv.reader(file)
         for row in reader:
+            soup = get_response_soup(row[0])
+            city_start = time()
             file_path = 'matplot_data/city_url_month/' + fileutil.get_file_name(path, False)[0][-1:] + '/'
             fileutil.is_dir_live(file_path, True)
-            soup = get_response_soup(row[0])
 
             # 存储历史天气路劲的文件名为 matplot_data/city_url_month/城市的首字母大写/城市中文名.csv
             file_path += row[1] + '.csv'
@@ -109,8 +115,13 @@ def check_city_url_csv(path):
                     strs += url_month.replace("' + this.value + '", month) + ',' + option.string + '\n'
                     result_file.write(strs)
             # 读取一个城市后，睡眠2秒
-            logger.info('{}数据爬取完毕，线程睡眠2秒'.format(row[1]))
-            sleep(2)
+            city_end = time()
+            all_time.append(city_end - city_start)
+            logger.info('{}数据爬取完毕，耗时{}，线程睡眠1秒'.format(row[1], city_end - city_start))
+            sleep(1)
+    sumtime = sum(all_time)
+    avetime = sumtime / len(all_time)
+    logger.info('爬取{}文件共耗时{}，平均耗时{} '.format(path, sumtime, avetime))
 
 
 def plt_show():
@@ -147,4 +158,4 @@ if __name__ == '__main__':
     # plt_show()
     # get_city_url('https://lishi.tianqi.com/')
     # test_os()
-    get_city_month_url('matplot_data/city_url/citys_url__.csv')
+    get_city_month_url('matplot_data/city_url/')
