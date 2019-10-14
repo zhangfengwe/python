@@ -73,9 +73,15 @@ def get_city_url(url):
 
 
 def get_city_month_url(path):
+    alltimes = []
+    allnums = []
     # 爬取指定文件内的城市
     if os.path.isfile(path):
-        check_city_url_csv(path)
+        alltime, allnum = check_city_url_csv(path)
+        allnums.append(allnum)
+        alltimes.append(alltime)
+        sumtime = sum(alltimes)
+        logger.info('此次爬虫爬取{}文件共耗时{}，平均耗时{} '.format(path, sumtime, sumtime / sum(allnums)))
     # 爬取指定文件夹
     elif os.path.isdir(path):
         for root, dirs, files in os.walk(path):
@@ -83,7 +89,13 @@ def get_city_month_url(path):
             for file in files:
                 if fileutil.get_file_name(root + file, False)[1] != '.csv':
                     continue
-                check_city_url_csv(root + file)
+                alltime, allnum = check_city_url_csv(root + file)
+                allnums.append(allnum)
+                alltimes.append(alltime)
+            sumtime = sum(alltimes)
+            avetime = sumtime / sum(allnums)
+            logger.info('此次爬虫爬取{}目录共耗时{}，平均耗时{} '.format(path, sumtime, avetime))
+
     else:
         logger.error('{} is error'.format(path))
 
@@ -117,11 +129,12 @@ def check_city_url_csv(path):
             # 读取一个城市后，睡眠2秒
             city_end = time()
             all_time.append(city_end - city_start)
-            logger.info('{}数据爬取完毕，耗时{}，线程睡眠1秒'.format(row[1], city_end - city_start))
+            logger.debug('{}数据爬取完毕，耗时{}，线程睡眠1秒'.format(row[1], city_end - city_start))
             sleep(1)
     sumtime = sum(all_time)
     avetime = sumtime / len(all_time)
     logger.info('爬取{}文件共耗时{}，平均耗时{} '.format(path, sumtime, avetime))
+    return sumtime, len(all_time)
 
 
 def plt_show():

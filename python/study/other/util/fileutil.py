@@ -17,6 +17,7 @@ def is_dir_live(filename, create=False):
     if path.exists(file_path):
         return True
     elif create:
+        logger.info('路径{}'.format(file_path))
         makedirs(file_path)
         return True
     else:
