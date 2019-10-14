@@ -3,20 +3,22 @@
 import requests
 from bs4 import BeautifulSoup
 from python.study.other.config.logger import Logger
-import os
 from time import sleep, time
 from python.study.other.config.readconfig import MyConfig
 import python.study.other.util.fileutil as fileutil
+import python.study.other.util.strutil as strutil
 
 logger = Logger().get_logger()
 
 
 def get_response(url):
     start = time()
-    header = ('Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 '
-              '(KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36')
+    header = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+              '(KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36')
     kv = {'user-agent': header}
     response = requests.get(url, headers=kv)
+    if response.status_code != 200:
+        logger.info(response.status_code)
     html = response.text
     soup = BeautifulSoup(html, 'html.parser')
     end = time()
@@ -37,12 +39,10 @@ def prase_char(soup, baseurl):
         if not a:
             filepath = base_path
             filepath += li.string.replace(' ', '')
-            logger.info('书部路径{}'.format(filepath))
-            # os.makedirs(base_path + li.string)
             continue
-        logger.info('fffff{}'.format(filepath))
         get_content(baseurl + a.attrs['href'], filepath + '/' + a.string + '.txt')
-        strurl += baseurl + a.attrs['href'] + ',' + a.string + '\n'
+        logger.info('章节名 {}内容获取完毕'.format(a.string))
+        # strurl += baseurl + a.attrs['href'] + ',' + a.string + '\n'
         # file.write(strurl)
     sleep(0.05)
 
@@ -54,11 +54,13 @@ def get_content(url, file_path):
     with open(file_path, 'w', encoding='utf-8') as file:
         content = ''
         h1 = soup.select_one('h1')
-        logger.info('h1{}'.format(h1.string))
-        content += h1.string
+        logger.debug('章节名 {}'.format(h1.string))
+        content += h1.string + '\n'
 
         div = soup.select_one('div[id="txtContent"]')
-        content += div.text.strip(' ').replace('<br/>', '\n')
+        divcontent = strutil.split_str(str(div), '<div id="txtContent">', '</div>', False)
+        divcontent = divcontent.strip().replace('<br/>', '\n')# .replace('<div class="gad2"><script type="text/javascript">try{mad1();} catch(ex){}</script></div>', '')
+        content += '    ' + divcontent
         file.write(content)
 
 
