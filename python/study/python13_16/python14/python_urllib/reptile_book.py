@@ -59,7 +59,8 @@ def get_content(url, file_path):
 
         div = soup.select_one('div[id="txtContent"]')
         divcontent = strutil.split_str(str(div), '<div id="txtContent">', '</div>', False)
-        divcontent = divcontent.strip().replace('<br/>', '\n')# .replace('<div class="gad2"><script type="text/javascript">try{mad1();} catch(ex){}</script></div>', '')
+        divcontent = divcontent.strip().replace('<br/>', '\n').replace(
+            '<div class="gad2"><script type="text/javascript">try{mad1();} catch(ex){}</script></div>', '')
         content += '    ' + divcontent
         file.write(content)
 
