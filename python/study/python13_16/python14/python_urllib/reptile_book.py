@@ -33,8 +33,6 @@ def prase_char(soup, baseurl):
     filepath = base_path
     # with open('bookurl.csv', 'w', encoding='GBK') as file:
     for li in li_list:
-        strurl = ''
-
         a = li.select_one('a')
         if not a:
             filepath = base_path
