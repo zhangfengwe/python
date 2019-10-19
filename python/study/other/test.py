@@ -45,6 +45,9 @@ class ProductTest(unittest.TestCase):
         #         for str_sub_s in str_sub_list:
         #             print(str_sub_s.replace('\'', '').strip())
 
+    def test_str2(self):
+        print('http://lishi.tianqi.com/suyouqi/201909.html'[-11:-5])
+
 
 
     def test_logger_dayli(self):

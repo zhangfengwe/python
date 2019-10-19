@@ -5,13 +5,16 @@
     字典，按照名称进行赋值，SQL中使用:no进行定位（no为字典中的key）
 '''
 
-# import cx_Oracle
-# import os
+import cx_Oracle
+import os
 from python.study.other.config.readconfig import MyConfig
-from python.study.python13_16.python13 import *
+import traceback
+from python.study.other.config.logger import Logger
 
 # 设置Oracle字符编码
 os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.ZHS16GBK'
+
+logger = Logger().get_logger()
 
 
 def con():
@@ -21,23 +24,26 @@ def con():
     #            qmark  使用问号
     #            numeric 使用:1的形式
     #            named 使用:no的形式
-    user = MyConfig.get_value('database', 'user')
-    password = MyConfig.get_value('database', 'password')
-    server = MyConfig.get_value('database', 'host')
-    port = MyConfig.get_value('database', 'port')
-    dbname = MyConfig.get_value('database', 'dbname')
-    cx_Oracle.paramstyle = 'numeric'
-    # 使用tns连接
-    oracle_tns = cx_Oracle.makedsn(server, int(port), dbname)
-    conn = cx_Oracle.connect(user, password, oracle_tns)
-    # 'xlink/942640@127.0.0.1:1521/HKXLINK'
-    # conn = cx_Oracle.connect(user + '/' + password + '@' + server + ':' + port + '/' + dbname)
-    curs = conn.cursor()
+    try:
+        user = MyConfig.get_value('database', 'user')
+        password = MyConfig.get_value('database', 'password')
+        server = MyConfig.get_value('database', 'host')
+        port = MyConfig.get_value('database', 'port')
+        dbname = MyConfig.get_value('database', 'dbname')
+        cx_Oracle.paramstyle = 'numeric'
+        # 使用tns连接
+        oracle_tns = cx_Oracle.makedsn(server, int(port), dbname)
+        conn = cx_Oracle.connect(user, password, oracle_tns)
+        # 'xlink/942640@127.0.0.1:1521/HKXLINK'
+        # conn = cx_Oracle.connect(user + '/' + password + '@' + server + ':' + port + '/' + dbname)
+        curs = conn.cursor()
+        logger.info('connect {} use {} is success'.format(dbname, user))
+        return conn, curs
+    except:
+        logger.error(traceback.format_exc())
 
-    return conn, curs
 
-
-def select(curs, para=['',[]]):
+def select(curs, para=['', []]):
     '''
     查询
     :param curs:
@@ -52,7 +58,7 @@ def select(curs, para=['',[]]):
         if not values:
             curs.execute(sql)
         else:
-            curs.execute(sql,values)
+            curs.execute(sql, values)
         # fetchall() 取出所有数据
         # fetchone() 取出单条数据
         return curs.fetchall()
@@ -79,10 +85,11 @@ def insert(conn, curs, values=[], sql=''):
                     curs.executemany(sql, values)
                 else:
                     curs.execute(sql, values)
-                conn.commit() # 不提交,无法插入
+                # 不提交,无法插入
+                conn.commit()
             except Exception as e:
                 conn.rollback()
-                traceback.print_exc()
+                logger.error(traceback.format_exc())
 
 
 def update(conn, curs, value=[], sql=''):
@@ -106,7 +113,7 @@ def update(conn, curs, value=[], sql=''):
                 conn.commit()
             except Exception as e:
                 conn.rollback()
-                traceback.print_exc()
+                logger.error(traceback.format_exc())
 
 
 def delete(conn, curs, value=[], sql=''):
@@ -129,34 +136,6 @@ def delete(conn, curs, value=[], sql=''):
                 conn.commit()
             except Exception as e:
                 conn.rollback()
-                traceback.print_exc()
+                logger.error(traceback.format_exc())
 
 
-def main():
-    try:
-        conn, curs = con()
-        # 查询
-        # result = select(curs,'''''')
-        # for line in result:
-        #     print(result)
-        # 插入
-        insert_sql = 'insert into respcode_map(respcode_transmit,channel_transmit,respcode,txstatus,message,flag)' \
-                    'values(:1, :2, :3, :4, :5, :6)'
-        values = []
-        values.append(('123', 'ESB', 'a', 'b', '11', '1'))
-        # values.append(('124', 'ESB', 'a', 'b', '11', '1'))
-        insert(conn, curs, ['123', 'ESB', 'a', 'b', '11', '1'], insert_sql)
-        # 修改
-        # update_sql = 'update respcode_map set respcode = :1 WHERE respcode_transmit = :2'
-        # rows = update(conn,curs,('错误', '123'),update_sql)
-        # 删除
-        # delete_sql = 'delete from respcode_map WHERE respcode_transmit = :1'
-        # delete(conn,curs,('123',), delete_sql)
-    except (ValueError,Exception) as e:
-        traceback.print_exc()
-    finally:
-        conn.close()
-
-
-if __name__ == '__main__':
-    main()

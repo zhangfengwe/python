@@ -35,7 +35,7 @@ class Logger():
 
     def __init__(self):
 
-        self.filename = MyConfig.get_value('logger', 'log_file')
+        self.filename = MyConfig.get_value('path', 'base_path') + MyConfig.get_value('logger', 'log_file')
         # 根据完整文件路径获取文件目录
         # path.dirname 获取文件目录
         # path.basename 获取文件名

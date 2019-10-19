@@ -1,6 +1,6 @@
 # 常用文件工具方法
 
-from os import path, makedirs
+from os import path, makedirs, walk
 from python.study.other.config.logger import Logger
 
 logger = Logger().get_logger()
@@ -40,3 +40,22 @@ def get_file_name(filepath, endflag=True):
     else:
         logger.error('{} is not exists'.format(filepath))
         return False
+
+
+def get_all_file(rootpath):
+    '''
+    获取目录下所有文件(包括子目录)
+    :param rootpath:
+    :return:
+    '''
+    allfiles = []
+    if path.exists(rootpath):
+        for root, dirs, files in walk(rootpath):
+            for file in files:
+                allfiles.append(path.join(root, file))
+            for subdir in dirs:
+                get_all_file(path.join(root, subdir))
+        return allfiles
+    else:
+        logger.error('{} is not a legal path'.format(rootpath))
+
