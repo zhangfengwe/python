@@ -139,3 +139,22 @@ def delete(conn, curs, value=[], sql=''):
                 logger.error(traceback.format_exc())
 
 
+def create_table(conn, curs, sqls=[]):
+    '''
+    创建表格，可同时执行多条建表语句，多条建表语句存放在列表中
+    :param conn:
+    :param curs:
+    :param sqls:
+    :return:
+    '''
+    if len(sqls) == 0:
+        raise ValueError('SQL is null')
+    else:
+        try:
+            for sql in sqls:
+                curs.execute(sql)
+            conn.commit()
+        except Exception as e:
+            conn.rollback()
+            logger.error(traceback.format_exc())
+            raise e

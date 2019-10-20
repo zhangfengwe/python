@@ -46,7 +46,7 @@ class ProductTest(unittest.TestCase):
         #             print(str_sub_s.replace('\'', '').strip())
 
     def test_str2(self):
-        print('http://lishi.tianqi.com/suyouqi/201909.html'[-11:-5])
+        print('http://lishi.tianqi.com/suyouqi/201909.html'[24:-12])
 
 
 

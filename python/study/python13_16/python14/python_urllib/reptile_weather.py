@@ -4,9 +4,9 @@ from bs4 import BeautifulSoup
 import csv
 import matplotlib.pyplot as plt
 import matplotlib
-import python.study.other.util.fileutil as fileutil
-import python.study.other.util.strutil as strutil
+from python.study.other.util import fileutil, strutil
 from python.study.other.config.logger import Logger
+from python.study.other.config.readconfig import MyConfig
 import os
 from time import sleep, time
 
@@ -15,6 +15,7 @@ matplotlib.rcParams['axes.unicode_minus'] = False
 
 
 logger = Logger().get_logger()
+base_path = MyConfig.get_value('path', 'base_path')
 
 
 def get_response_soup(url):
@@ -51,16 +52,18 @@ def get_data(urls):
 
 
 def get_city_url(url):
-    file_path = 'matplot_data/city_url/citys_url_'
+    file_path = base_path + 'data/weather/matplot_data/city_url/citys_url_'
+    start = time()
     if fileutil.is_dir_live(file_path, True):
         soup = get_response_soup(url)
         city_div = soup.select_one('div[style="padding:10px 15px 20px 15px"]')
         ul_list = city_div.select('ul')
         for ul in ul_list:
             first = ul.attrs.get('id')[-1:]
-            with open(file_path + first.upper() + '.csv', 'w', encoding='GBK') as file:
+            logger.info('获取首字母为{}的城市数据开始'.format(first))
+            # 修改操作文件的方式,从写改为追加,完善网页中s与S两个ul数据写入文件被覆盖
+            with open(file_path + first.upper() + '.csv', 'a+', encoding='GBK') as file:
                 li_list = ul.select('li')
-
                 for li in li_list:
                     a = li.select_one('a')
                     str2 = ''
@@ -70,6 +73,9 @@ def get_city_url(url):
                     str2 += a.attrs['href'] + ',' + a.string + '\n'
                     logger.debug('str2 is {}'.format(str2))
                     file.write(str2)
+            logger.info('获取首字母为{}的城市数据结束'.format(first))
+    end = time()
+    logger.info('获取城市天气url数据结束，耗时{}'.format(end - start))
 
 
 def get_city_month_url(path):
@@ -108,7 +114,7 @@ def check_city_url_csv(path):
         for row in reader:
             soup = get_response_soup(row[0])
             city_start = time()
-            file_path = 'matplot_data/city_url_month/' + fileutil.get_file_name(path, False)[0][-1:] + '/'
+            file_path = base_path + 'data/weather/matplot_data/city_url_month/' + fileutil.get_file_name(path, False)[0][-1:] + '/'
             fileutil.is_dir_live(file_path, True)
 
             # 存储历史天气路劲的文件名为 matplot_data/city_url_month/城市的首字母大写/城市中文名.csv
@@ -169,6 +175,6 @@ def test_os():
 if __name__ == '__main__':
     # get_data(['http://lishi.tianqi.com/wuhan/201707.html'])
     # plt_show()
-    # get_city_url('https://lishi.tianqi.com/')
+    # get_city_url('https://lishi.tianqi.com')
     # test_os()
-    get_city_month_url('matplot_data/city_url/')
+    get_city_month_url(base_path + 'data/weather/matplot_data/city_url/')
