@@ -7,6 +7,8 @@ from python.study.other.config.logger import Logger
 from python.study.other.config.readconfig import MyConfig
 from time import sleep, time
 import traceback
+from python.study.python13_16.python14.python_urllib.file_to_db import read_file
+from os import path
 
 logger = Logger().get_logger()
 base_path = MyConfig.get_value('path', 'base_path')
@@ -92,8 +94,21 @@ def getdata_main(city):
         coon.close()
 
 
+def getdata_file():
+    allfiles = fileutil.get_all_file(path.join(base_path, 'data/weather/matplot_data/city_url_month'))
+    start = time()
+    for file in allfiles:
+        logger.info('start trans data from {} to db'.format(file))
+        filedatas = read_file(file)
+        for filedata in filedatas:
+            get_data_to_file(filedata)
+    end = time()
+    logger.info('共耗时{}'.format(end - start))
+
+
 if __name__ == '__main__':
-    getdata_main('单县')
+    # getdata_main('单县')
+    getdata_file()
 
 
 

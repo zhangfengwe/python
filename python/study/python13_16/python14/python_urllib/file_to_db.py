@@ -78,7 +78,7 @@ def read_file(filepath):
     try:
         filedatas = []
         cityname = fileutil.get_file_name(filepath, endflag=False)[0]
-        logger.info('cityname is {}'.format(cityname))
+        # logger.info('cityname is {}'.format(cityname))
         with open(filepath, 'r', encoding='GBK') as file:
             reader = csv.reader(file)
             for row in reader:
@@ -88,7 +88,7 @@ def read_file(filepath):
                 # 气温走势图文件路径为：base_path + data/weather/matplot/ + 城市名/ + 城市名 + 月份 + 气温走势图.png
                 file_name_png = base_path + 'data/weather/matplot/' + cityname +\
                                 '/' + cityname + row[1] + '气温走势图.png'
-                logger.debug('png file path is {}'.format(file_name_png))
+                # logger.debug('png file path is {}'.format(file_name_png))
                 data.extend([month, url, file_name_png])
                 # logger.info('data is {}'.format(data))
                 filedatas.append(data)
