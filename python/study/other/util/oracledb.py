@@ -48,7 +48,7 @@ def select(curs, para=['', []]):
     查询
     :param curs:
     :param para: 元组，（SQL,(values)）
-    :type para:tuple
+    :type para:list
     :return:
     '''
     sql, values = para
