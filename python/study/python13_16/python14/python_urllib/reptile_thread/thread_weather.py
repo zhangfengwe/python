@@ -2,12 +2,12 @@
 
 import requests
 from threading import Thread, Lock
-from queue import Queue
+from queue import Queue, Empty
 from bs4 import BeautifulSoup
 from time import time, sleep
 from python.study.other.config.logger import Logger
 from python.study.other.config.readconfig import MyConfig
-from python.study.other.util import fileutil, strutil
+from python.study.other.util import fileutil, requestutil
 import traceback
 from python.study.python13_16.python14.python_urllib.file_to_db import read_file
 from os import path
@@ -39,25 +39,14 @@ class FindData(Thread):
                     CRAWL_EXIT = True
                     continue
                 urldata = self.url_queue.get(False)
-                soup = self.get_data(urldata[2])
+                soup = BeautifulSoup(requestutil.get_response(urldata[2], timeout=3), 'html.parser')
+                # soup = self.get_data(urldata[2])
                 urldata.append(soup)
                 sleep(0.05)
                 self.data_queue.put(urldata)
             except:
                 logger.error(traceback.format_exc())
         logger.info('{} is end'.format(self.thread_name))
-
-    def get_data(self, url):
-        start = time()
-        header = ('Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 '
-                  '(KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36')
-        kv = {'user-agent': header}
-        response = requests.get(url, headers=kv)
-        html = response.text
-        soup = BeautifulSoup(html, 'html.parser')
-        end = time()
-        logger.info('request获取{}网页耗时{}'.format(url, end - start))
-        return soup
 
 
 class ParseData(Thread):
@@ -72,11 +61,15 @@ class ParseData(Thread):
         global PARSE_EXIT
         while not PARSE_EXIT:
             try:
+                urldata = self.data_queue.get(True, timeout=3)
                 # if self.data_queue.empty():
                 #     PARSE_EXIT = True
                 #     continue
-                urldata = self.data_queue.get(True)
                 self.data_to_file(urldata)
+            except Empty:
+                # if self.data_queue.empty():
+                PARSE_EXIT = True
+                logger.error('Queue is empty')
             except:
                 logger.error(traceback.format_exc())
         logger.info('解析进程 {} is end'.format(self.thread_name))
