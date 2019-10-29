@@ -2,7 +2,7 @@
 
 import configparser
 import os
-import python.study.other.config as con
+
 
 class MyConfig:
     config = configparser.ConfigParser()
@@ -12,7 +12,8 @@ class MyConfig:
     try:
         CONFIG_PATH = os.environ['CONFIG_PATH']
     except Exception:
-        CONFIG_PATH = con.CONFIG_PATH
+
+        CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.ini')
         if not CONFIG_PATH:
             raise FileNotFoundError
     # 读取使用绝对路径
@@ -27,8 +28,10 @@ class MyConfig:
         except ValueError:
             raise ValueError
 
+
 def main():
     print(MyConfig.get_value('logger', 'log_level'))
+
 
 if __name__ == '__main__':
     main()
