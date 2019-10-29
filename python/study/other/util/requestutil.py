@@ -67,8 +67,7 @@ kv_local = {
 #     'user-agent': UserAgent().random
 # }
 proxies = {
-    'http': "http://183.164.238.72:9999",
-    'http': "http://117.69.201.148:9999",
+    'http': "http://27.128.187.22:3128",
     'https': 'https://113.124.93.45:9999',
     'https': 'https://106.110.212.112:9999'
 }
@@ -77,10 +76,10 @@ proxies = {
 @decorator.timit(logger)
 def get_response(url, timeout):
     try:
-        response = requests.get(url, headers=kv_local)
-        # if response.status_code != 200:
-        #     logger.error('{} get response is fail'.format(url))
-        #     return None
+        response = requests.get(url, headers=kv_local, proxies=proxies)
+        if response.status_code != requests.codes.ok:
+            logger.error('{} get response is fail, retcode is {}'.format(url, response.status_code))
+            # return None
         return response.text
     except:
         logger.error(traceback.format_exc())

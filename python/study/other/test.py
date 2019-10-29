@@ -9,6 +9,7 @@ import unittest
 from python.study.practice.python02 import my_math
 from timeit import timeit
 from python.study.other.config.logger import Logger
+from .util import fileutil
 import re
 import time
 from time import  sleep
@@ -46,7 +47,9 @@ class ProductTest(unittest.TestCase):
         #             print(str_sub_s.replace('\'', '').strip())
 
     def test_str2(self):
-        print('http://lishi.tianqi.com/suyouqi/201909.html'[24:-12])
+        print('111')
+        st = 'http://lishi.tianqi.com/dabancheng/201808.html'
+        print(st[st.find('com/'):st.rfind('/')])
 
 
 

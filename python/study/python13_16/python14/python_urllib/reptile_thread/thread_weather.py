@@ -61,7 +61,7 @@ class ParseData(Thread):
         global PARSE_EXIT
         while not PARSE_EXIT:
             try:
-                urldata = self.data_queue.get(True, timeout=3)
+                urldata = self.data_queue.get(True, timeout=300)
                 # if self.data_queue.empty():
                 #     PARSE_EXIT = True
                 #     continue

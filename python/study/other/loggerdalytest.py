@@ -1,10 +1,8 @@
-
-
-from timeit import timeit
-from python.study.other.config.logger import Logger
-import re
 import time
-from time import  sleep
+from time import sleep
+
+from python.study.other.config.logger import Logger
+
 
 def main():
     logger = Logger().get_logger()
@@ -14,6 +12,7 @@ def main():
         if time.strftime('%Y%m%d', time.localtime()) == '20190928':
             logger.info('当前时间{}'.format(time.strftime('%Y%m%d', time.localtime())))
             break
+
 
 if __name__ == '__main__':
     main()

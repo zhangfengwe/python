@@ -2,6 +2,7 @@
 
 from functools import wraps
 from time import time
+import traceback
 
 
 def timit(logger):
@@ -21,3 +22,21 @@ def timit(logger):
         return cost
     return timit_decorator
 
+
+def errlog(logger):
+    '''
+    打印Exception信息
+    :param logger:
+    :return:
+    '''
+    def errlog_decorator(func):
+        @wraps(func)
+        def logerr(*args, **kwargs):
+            try:
+                result = func(*args, **kwargs)
+                return result
+            except Exception as e:
+                logger.error(traceback.format_exc())
+                raise e
+        return logerr
+    return errlog_decorator

@@ -40,6 +40,15 @@ comment on column CITY_WEATHER_URL.data_file_name
 alter table CITY_WEATHER_URL
   add constraint PK_CITY_WEATHER_URL primary key (CITY_NAME, CITY_WEATHER_MONTH)'''
 
+city_inf_sql = '''
+create table CITY_INF
+(
+  city_name          NVARCHAR2(50) not null,
+  city_full_name VARCHAR2(6) not null,
+  city_code   VARCHAR2(10) not null,
+);
+'''
+
 data_table_sql = '''create table CITY_WEATHER_DATA
 (
   city_date VARCHAR2(10) not null,
@@ -68,6 +77,16 @@ comment on column CITY_WEATHER_DATA.windlevel
 data_insert_sql = '''
 insert into CITY_WEATHER_DATA(city_date, hight, low, weather, windirction, windlevel) values (:1, :2, :3, :4, :5, :6)'''
 
+get_city_inf_sql = '''
+select city_name, city_code from CITY_INF
+'''
+
+insert_city_inf = '''
+insert into CITY_INF(city_name, city_full_name, city_code) values (:1, :2, :3)'''
+
+get_city_code_sql = '''
+select city_code from CITY_INF where city_name = :1 and city_full_name = :2'''
+
 
 def read_file(filepath):
     '''
@@ -78,7 +97,6 @@ def read_file(filepath):
     try:
         filedatas = []
         cityname = fileutil.get_file_name(filepath, endflag=False)[0]
-        # logger.info('cityname is {}'.format(cityname))
         with open(filepath, 'r', encoding='GBK') as file:
             reader = csv.reader(file)
             for row in reader:
@@ -88,11 +106,11 @@ def read_file(filepath):
                 # 气温走势图文件路径为：base_path + data/weather/matplot/ + 城市名/ + 城市名 + 月份 + 气温走势图.png
                 file_name_png = base_path + 'data/weather/matplot/' + cityname +\
                                 '/' + cityname + row[1] + '气温走势图.png'
-                # logger.debug('png file path is {}'.format(file_name_png))
                 data.extend([month, url, file_name_png])
-                # logger.info('data is {}'.format(data))
                 filedatas.append(data)
-            return filedatas
+                # 获取城市拼音
+                cityfullname = url[url.find('com/') + 4:url.rfind('/')]
+            return filedatas, cityfullname
     except Exception:
         logger.error(traceback.format_exc())
 
@@ -127,13 +145,25 @@ def file_to_db():
     try:
         allstart = time()
         allfiles = fileutil.get_all_file(path.join(base_path, 'data/weather/matplot_data/city_url_month'))
+        citycode = 1
         for file in allfiles:
             start = time()
             logger.info('start trans data from {} to db'.format(file))
-            filedatas = read_file(file)
-            # logger.info('文件总数据filedata is {}'.format(filedatas))
+            filedatas, cityfullname = read_file(file)
+            # 获取城市名-城市拼音-城市编码映射
+            cityname = fileutil.get_file_name(file, False)[0]
+            city_code = '{:0>6}'.format(str(citycode))
+            cityinf = [cityname, cityfullname, city_code]
+            # 插入城市url数据
             oracledb.insert(conn, curs, filedatas, insert_sql)
+            # 插入城市名-城市拼音-城市编码映射
+            oracledb.insert(conn, curs, cityinf, insert_city_inf)
+            citycode += 1
             end = time()
+            # 转移录入数据库后的文件
+            filename = fileutil.get_file_name(file)
+            dist = path.join(base_path, 'data/weather/matplot_data/backup/city_url_month') + filename
+            fileutil.movefile(file, dist)
             logger.info('trans data from {} to db is finish, cost is {}'.format(file, end-start))
         allend = time()
         logger.info('finish ......, allcost is {}'.format(allend - allstart))
@@ -157,17 +187,15 @@ def data_to_db():
         for file in allfiles:
             start = time()
             # 获取城市拼音
-            cityname = fileutil.get_file_name(file, endflag=False)[0].split('_')[0]
+            cityfullname = fileutil.get_file_name(file, endflag=False)[0].split('_')[0]
+            # 获取城市中文名称
+            cityname = fileutil.get_file_dir(file)
             if cityname not in citys:
-                table_name = base_table_name + '_' + cityname.upper()
-
-                oracledb.create_table(conn, curs, [data_table_sql.replace(base_table_name, table_name)])
-                # oracledb.create_table(conn, curs, [alert_sql.replace(base_table_name, table_name)])
-                citys.append(cityname)
-                logger.info('create table {}'.format(table_name))
+                citycode = oracledb.select(curs, [get_city_code_sql, [cityfullname, cityname]])
+                table_name = base_table_name + '_' + citycode
+                citys.append(cityfullname)
             logger.info('start trans data from {} to db'.format(file))
             filedatas = read_data_file(file)
-            # logger.info('文件总数据filedata is {}'.format(filedatas))
             oracledb.insert(conn, curs, filedatas, data_insert_sql.replace(base_table_name, table_name))
             end = time()
             logger.info('trans data from {} to db is finish, cost is {}'.format(file, end - start))
@@ -177,6 +205,18 @@ def data_to_db():
         logger.error(traceback.format_exc())
     finally:
         conn.close()
+
+
+def create_table():
+    conn, curs = oracledb.con()
+    try:
+        citys = oracledb.select(curs, [get_city_inf_sql, []])
+        for cityname, citycode in citys:
+            table_name = base_table_name + '_' + citycode
+            oracledb.create_table(conn, curs, [data_table_sql.replace(base_table_name, table_name)])
+            logger.info('for {} create table {}'.format(cityname, table_name))
+    except Exception:
+        logger.error(traceback.format_exc())
 
 
 if __name__ == '__main__':
