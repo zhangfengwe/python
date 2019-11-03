@@ -160,9 +160,9 @@ def file_to_db():
             oracledb.insert(conn, curs, cityinf, insert_city_inf)
             citycode += 1
             end = time()
-            # 转移录入数据库后的文件
-            filename = fileutil.get_file_name(file)
-            dist = path.join(base_path, 'data/weather/matplot_data/backup/city_url_month') + filename
+            # 转移录入数据库后的文件目录
+            dist = path.join(base_path, 'data/weather/matplot_data/backup/city_url_month') \
+                   + '/' + fileutil.get_file_dir(file).upper()
             fileutil.movefile(file, dist)
             logger.info('trans data from {} to db is finish, cost is {}'.format(file, end-start))
         allend = time()
@@ -220,5 +220,5 @@ def create_table():
 
 
 if __name__ == '__main__':
-    # file_to_db()
-    data_to_db()
+    file_to_db()
+    # data_to_db()

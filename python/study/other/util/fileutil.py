@@ -67,6 +67,12 @@ def get_all_file(rootpath):
 
 @errlog(logger)
 def movefile(src, dist):
+    '''
+    移动文件
+    :param src: 源文件
+    :param dist: 目标文件目录
+    :return:
+    '''
     if not path.exists(dist):
         makedirs(dist)
     shutil.move(src, dist)
