@@ -1,22 +1,27 @@
 # MongoDB数据库
 
 from pymongo import MongoClient
+from python.study.other.util import fileutil
 import csv
 
 
 def client():
     # dbclient = MongoClient('mongodb://localhost:27017')
     dbclient = MongoClient(host='localhost', port=27017)
-    db = dbclient.mongodb_study
+    db = dbclient.weather
     # db.authenticate('fwzhang', 'fwzhang')
-    cityurlcoll = db.cityurl
+    cityurlcoll = db.conghua
     # collection.insert_one({'dbname': 'mongodb', 'user': 'admin', 'password': '123456'})
-    with open('D:/python/data/weather/matplot_data/city_url/citys_url_L.csv', 'r') as file:
-        reader = csv.reader(file)
+    # file = fileutil.get_all_file('C:/Users/zhangfengwei/Desktop/201703.csv')
+    # for file in files:
+    with open('C:/Users/zhangfengwei/Desktop/201703.csv', 'r', encoding='utf8') as f:
+        reader = csv.reader(f)
         datas = []
         for row in reader:
-            dic = {'url': row[0], 'city_name': row[1]}
+            dic = {'date': row[0].replace('-', ''), 'low': row[2], 'hight': row[1],
+                   'weather': row[3], 'windirction': row[4], 'windlevel': row[5]}
             datas.append(dic)
+            # datas.append(dic)
     cityurlcoll.insert_many(datas)
 
 
@@ -46,7 +51,40 @@ def update():
     user.update_one({'name': '张三'}, {'$pull': {'address': {'city': '上海'}}})
 
 
+def insert_city_data():
+    dbclient = MongoClient(host='localhost', port=27017)
+    db = dbclient.weather
+    city_name_coll = db.cityname
+    files = fileutil.get_all_file('D:/python/data/weather/matplot_data/备份/city_month_data')
+    for file in files:
+        city_name = fileutil.get_file_dir(file)
+        city_name_ch = fileutil.get_file_name(file).split('_')[0]
+
+        if city_name_coll.count_documents({'city_name_ch': city_name_ch}) == 0:
+            city_name_coll.insert_one({'city_name': city_name, 'city_name_ch': city_name_ch})
+        city_data_coll = db[city_name_ch]
+        with open(file, 'r') as f:
+            reader = csv.reader(f)
+            datas = []
+            for row in reader:
+                low = row[1]
+                hight = row[2]
+                if row[2] and row[1]:
+                    hight = int(row[2])
+                    low = int(row[1])
+                    if low >= hight:
+                        low, hight = hight, low
+                dic = {'date': row[0].replace('-', ''), 'low': low, 'hight': hight,
+                       'weather': row[3], 'windirction': row[4], 'windlevel': row[5]}
+                datas.append(dic)
+            if datas:
+                city_data_coll.insert_many(datas)
+    # city_data_coll = db
+
+
 if __name__ == '__main__':
-    client()
+    # client()
     # select()
     # update()
+    insert_city_data()
+    # test()
