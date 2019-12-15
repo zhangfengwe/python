@@ -97,3 +97,49 @@ def check_date(date):
         return True
     except ValueError:
         return False
+
+
+def reject_unicode(uni, source):
+    '''
+    去除指定unicode字符
+    :param source:
+    :param uni:
+    :return:
+    '''
+    try:
+        pattern = '[' + uni + ']'
+        result = re.sub(pattern, '', source)
+        return result
+    except Exception:
+        loger.error(traceback.format_exc())
+
+
+def check_chinese(source):
+    '''
+    检测字符串中是否含有中文
+    :param source:
+    :return:
+    '''
+    try:
+        match = re.compile(reconfig.CHINESE_COM)
+        match_result = match.search(source)
+        if match_result:
+            return True
+        else:
+            return False
+    except Exception:
+        loger.error(traceback.format_exc())
+        return False
+
+
+if __name__ == '__main__':
+    source = '''
+	
+        
+        
+        	
+        　　大道朝天是一个非常好的故事。'''
+    # print(check_chinese(source))
+    print(source)
+    print('--------')
+    print(reject_unicode('\t\r\n', reject_unicode('\u3000', source)).replace(' ', ''))

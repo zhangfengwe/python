@@ -46,5 +46,8 @@ ID_15_COM_X = r'''^(?P<province>\d{2}) # 省份
                   (?P<birthday>\d{6}) #出生日期
                   (?P<seq>\d{3})$ # 序列号'''
 
+# 汉字正则表达式
+CHINESE_COM = u'[\u4e00-\u9fa5]'
+
 
 

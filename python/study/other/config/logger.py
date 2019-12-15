@@ -2,6 +2,7 @@
 
 import logging.handlers
 import logging.config
+from datetime import datetime
 from os import path, makedirs
 from python.study.other.config.readconfig import MyConfig
 
@@ -35,7 +36,9 @@ class Logger():
 
     def __init__(self):
 
-        self.filename = MyConfig.get_value('path', 'base_path') + MyConfig.get_value('logger', 'log_file')
+        today = datetime.now()
+        self.filename = MyConfig.get_value('path', 'base_path') \
+                        + MyConfig.get_value('logger', 'log_file').format(today.year, today.month, today.day)
         # 根据完整文件路径获取文件目录
         # path.dirname 获取文件目录
         # path.basename 获取文件名
@@ -50,13 +53,19 @@ class Logger():
     def get_logger(self):
         logger = logging.Logger('FinalLogger')
         # MIDNIGHT每天凌晨切换文件
-        log_handler = logging.handlers.TimedRotatingFileHandler(filename=self.filename, when='MIDNIGHT',
-                                                                backupCount=self.backup_count)
+        """
+        由于TimedRotatingFileHandler日志不能有效按天轮转，且问题原因不明
+        修改为使用按文件大小切换方式，按日轮转通过文件名来实现
+        日志按照大小轮转时，仍然会报“PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。”
+        """
+        log_handler = logging.handlers.RotatingFileHandler(filename=self.filename,
+                                                           maxBytes=self.max_size, backupCount=self.backup_count)
         log_handler.setFormatter(logging.Formatter(self.log_format))
         logger.addHandler(log_handler)
         logger.setLevel(self.level)
 
         return logger
+
 
 if __name__ == '__main__':
     logger = Logger().get_logger()
