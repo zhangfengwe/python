@@ -3,23 +3,9 @@
 import logging.handlers
 import logging.config
 from datetime import datetime
-from os import path, makedirs
+from os import path, makedirs, name
 from python.study.other.config.readconfig import MyConfig
-
-
-def singleton(cls):
-    '''
-    单例模式的装饰器函数
-    :param cls:
-    :return:
-    '''
-    instances = {}
-
-    def getInstance(*args, **kwargs):
-        if cls not in instances:
-            instances[cls] = cls(*args, **kwargs)
-        return instances[cls]
-    return getInstance
+from python.study.other.util.decorator import singleton
 
 
 @singleton
@@ -37,8 +23,10 @@ class Logger():
     def __init__(self):
 
         today = datetime.now()
-        self.filename = MyConfig.get_value('path', 'base_path') \
-                        + MyConfig.get_value('logger', 'log_file').format(today.year, today.month, today.day)
+        base_path = MyConfig.get_value('path', 'win_base_path')
+        if name is 'posix':
+            base_path = MyConfig.get_value('path', 'linux_base_path')
+        self.filename = base_path + MyConfig.get_value('logger', 'log_file').format(today.year, today.month, today.day)
         # 根据完整文件路径获取文件目录
         # path.dirname 获取文件目录
         # path.basename 获取文件名

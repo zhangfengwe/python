@@ -133,13 +133,7 @@ def check_chinese(source):
 
 
 if __name__ == '__main__':
-    source = '''
-	
-        
-        
-        	
-        　　大道朝天是一个非常好的故事。'''
-    # print(check_chinese(source))
+    source = '/book/123456/aaa.html'
     print(source)
     print('--------')
-    print(reject_unicode('\t\r\n', reject_unicode('\u3000', source)).replace(' ', ''))
+    print(re.findall('^/book/(.+?)/', source))

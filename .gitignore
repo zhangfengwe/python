@@ -7,3 +7,4 @@
 __pycache__
 testfile
 *.html
+self_util.egg-info

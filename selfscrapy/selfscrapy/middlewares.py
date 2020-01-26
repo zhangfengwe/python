@@ -16,9 +16,6 @@ from scrapy.utils.request import request_fingerprint
 
 from python.study.other.config.logger import Logger
 from python.study.other.util import requestutil
-
-
-
 # from scrapy.spidermiddlewares.urllength import
 
 logger = Logger().get_logger()
@@ -102,8 +99,6 @@ class PythonScrapyDownloaderMiddleware(object):
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
         # ---------------------------------------
-        # print("请求url :{}".format(request.url))
-        # print("起始url :{}".format(spider.start_urls))
         if not spider.start_urls.count(request.url)  \
                 and self.r.sadd('figerprint', request_fingerprint(request)) == 0:
             # print(request_fingerprint(request))

@@ -40,3 +40,18 @@ def errlog(logger):
                 raise e
         return logerr
     return errlog_decorator
+
+
+def singleton(cls):
+    '''
+    单例模式的装饰器函数
+    :param cls:
+    :return:
+    '''
+    instances = {}
+
+    def getInstance(*args, **kwargs):
+        if cls not in instances:
+            instances[cls] = cls(*args, **kwargs)
+        return instances[cls]
+    return getInstance

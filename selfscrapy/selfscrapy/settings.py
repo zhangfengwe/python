@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for python_scrapy project
+# Scrapy settings for selfscrapy project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,10 +9,10 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'python_scrapy'
+BOT_NAME = 'selfscrapy'
 
-SPIDER_MODULES = ['python_scrapy.spiders']
-NEWSPIDER_MODULE = 'python_scrapy.spiders'
+SPIDER_MODULES = ['selfscrapy.spiders']
+NEWSPIDER_MODULE = 'selfscrapy.spiders'
 
 # scrapy 日志相关配置
 # 是否启用日志
@@ -20,7 +20,7 @@ LOG_ENABLED = True
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-# USER_AGENT = 'python_scrapy (+http://www.yourdomain.com)'
+# USER_AGENT = 'selfscrapy (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -51,13 +51,13 @@ ROBOTSTXT_OBEY = False
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 # SPIDER_MIDDLEWARES = {
-#    'python_scrapy.middlewares.PythonScrapySpiderMiddleware': 543,
+#    'selfscrapy.middlewares.PythonScrapySpiderMiddleware': 543,
 # }
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   'python_scrapy.middlewares.PythonScrapyDownloaderMiddleware': 400,
+   'selfscrapy.middlewares.PythonScrapyDownloaderMiddleware': 400,
    # 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None
 }
 
@@ -70,7 +70,8 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'python_scrapy.pipelines.PythonScrapyPipeline': 300,
+   'selfscrapy.pipelines.PythonScrapyPipeline': 300,
+   'selfscrapy.pipelines.BookPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
