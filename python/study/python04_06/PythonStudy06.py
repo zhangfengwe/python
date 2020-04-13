@@ -32,6 +32,8 @@ def test2(*world, str2=''):
 def test3(world, name='fwzhang'):
     # 关键字参数测试函数
     print('{},{}'.format(world, name))
+
+
 x = 1
 y = math.sqrt
 print(callable(x))
@@ -41,7 +43,3 @@ print(test2.__name__)
 test2('fwzhang', 'zhangfengwei', 'zhangsan', str2='942640')
 test3(name='zhangfengwei', world='hello')
 test3(world='hi')
-
-
-
-

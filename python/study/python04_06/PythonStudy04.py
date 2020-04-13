@@ -1,4 +1,4 @@
-#字典
+# 字典
 '''
     字典是python内置的唯一一种映射类型
     字典通过{}创建，key:value形式，key值是唯一的，每个键值对之间用“,”隔开
@@ -22,12 +22,14 @@
 '''
 from copy import deepcopy
 
-item = [('name','fwzhang'),('age',25),('sex','男')]
+item = [('name', 'fwzhang'), ('age', 25), ('sex', '男')]
 str = '我叫{name},今年{age}岁，是一名{sex}生'
-item2 = [('account','942640'),('pwd','123qweasd')]
+item2 = [('account', '942640'), ('pwd', '123qweasd')]
 # 使用dict()创建字典
 di = dict(item)
-di2 = dict(name='fwzhang',age=25,sex='男')
+di2 = dict(name='fwzhang', age=25, sex='男')
+print(di)
+di['age'] += 1
 print(di)
 print(di2)
 print(str.format_map(di))
@@ -44,7 +46,7 @@ print(di2)
 # print('深拷贝 {}'.format(di))
 print(dict.fromkeys(['name', 'age', 'sex'], ('unknown')))
 print(dict.fromkeys(['name', 'age', 'sex']))
-print('get方法key存在 {} \nget方法key不存在 {}'.format(di.get('name','who'),di.get('account','the account not found')))
+print('get方法key存在 {} \nget方法key不存在 {}'.format(di.get('name', 'who'), di.get('account', 'the account not found')))
 print(di.items())
 print(di.keys())
 '''
@@ -52,7 +54,7 @@ pop,popitem
 print(di.pop('sex'))
 print(di.popitem())
 '''
-print('setdefault方法key存在 {} \nsetdefault方法key不存在 {}'.format(di.setdefault('name','who'),di.setdefault('account','123qweasd')))
+print('setdefault方法key存在 {} \nsetdefault方法key不存在 {}'.format(di.setdefault('name', 'who'), di.setdefault('account', '123qweasd')))
 print(di.values())
 di.update(dict(item2))
 print(di)

@@ -1,4 +1,4 @@
-#使用%格式转换符进行格式化字符串
+# 使用%格式转换符进行格式化字符串
 '''
 常见格式转换符：
     %s 以字符串str()形式输出  %10 前补空格，总长度为10
@@ -15,15 +15,15 @@
     %g 指数（e）或浮点数（根据长度）
     %G 指数（E）或浮点数（根据长度）
 '''
-str = ['a','b']
+str = ['a', 'b']
 num = 'a'
 num2 = 16
 num3 = 100010
-strY = ('hello world\n','fwzhang')
+strY = ('hello world\n', 'fwzhang')
 format = "%s%10s"
 print(format % strY)
 print('%c' % num)
-temp = '{num:b}' .format(num= num2)
+temp = '{num:b}' .format(num=num2)
 print(temp)
 temp = '%010o' % num2
 print(temp)

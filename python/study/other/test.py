@@ -51,8 +51,6 @@ class ProductTest(unittest.TestCase):
         st = 'http://lishi.tianqi.com/dabancheng/201808.html'
         print(st[st.find('com/'):st.rfind('/')])
 
-
-
     def test_logger_dayli(self):
         while True:
             self.logger.info('当前时间{}, 睡眠{}'.format(time.strftime('%Y%m%d', time.localtime()), 10000))

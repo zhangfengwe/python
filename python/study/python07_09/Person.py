@@ -53,5 +53,3 @@ class Person(Peo):
 class Man(Person):
     def changeFlag(self):
         self.flag = True
-
-

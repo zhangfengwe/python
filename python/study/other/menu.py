@@ -3,6 +3,7 @@
 
 import python.study.other.yinghua as yin
 
+
 class menu:
 
     screen_width = 100
@@ -33,7 +34,7 @@ class menu:
         box_width = self.text_width + self.screen_width // 2
         left_margin = (self.screen_width - box_width) // 2
         print(' ' * left_margin + '*' * box_width)
-        print(' ' * left_margin + '功能列表'.center(box_width - 6) )
+        print(' ' * left_margin + '功能列表'.center(box_width - 6))
 
         for menu in self.menu_list:
             content = '{}、{}：'.format(menu.get('index'), menu.get('desc'))
@@ -42,7 +43,6 @@ class menu:
         print(' ' * left_margin + ' ' * 25 + '0、退出' +
               ' ' * (self.screen_width - 27 - len('0、退出'.encode('gbk'))))
         print(' ' * left_margin + '-' * box_width)
-
 
     def chose_func(self):
         '''
@@ -53,8 +53,8 @@ class menu:
             chose = int(input('please input your chose:'))
             if not chose:
                 exit()
-            dic_chosed = self.menu_list[chose-1]
-            func = getattr(dic_chosed.get('obj'),dic_chosed.get('method'),None)
+            dic_chosed = self.menu_list[chose - 1]
+            func = getattr(dic_chosed.get('obj'), dic_chosed.get('method'), None)
             if func:
                 if dic_chosed.get('paramflag'):
                     func(dic_chosed.get('obj'))
@@ -62,8 +62,6 @@ class menu:
                     func()
             else:
                 print('the function you chosed is not exit')
-        else:
-            exit()
 
     def test_func(self):
         a = int(input('the first param:'))
@@ -83,6 +81,7 @@ def main():
     # menu_t.menus = test_menu
     menu_t.show_menu()
     menu_t.chose_func()
+
 
 if __name__ == '__main__':
     main()

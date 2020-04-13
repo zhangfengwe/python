@@ -9,7 +9,7 @@ from python.study.other.util.decorator import singleton
 
 
 @singleton
-class Logger():
+class Logger:
 
     levels = {
         'notset': logging.NOTSET,

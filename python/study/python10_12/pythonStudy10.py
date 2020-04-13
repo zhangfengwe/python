@@ -7,62 +7,77 @@ import heapq as head
 from random import shuffle
 from collections import deque
 import time
+import os
 import json
 
+from python.study.other.config.logger import Logger
 
-def sysMoudle():
+logger = Logger().get_logger()
+
+
+def sys_moudle():
     # 输出脚本路径及脚本名
     print(sys.argv)
     print(sys.platform)
 
 
-def osMoudle():
-    pass
+# os模块主要是对操作系统进行操作
+def os_moudle():
+    logger.info('获取环境变量： os.environ: {}'.format(os.environ))
+    logger.info('获取当前工作目录： os.getcwd(): {}'.format(os.getcwd()))
+    logger.info('创建文件夹：os.mkdir(./test/), {}  创建多级文件夹： os.makedirs(./test1/a/b/c) {}'
+                .format(os.mkdir('./test'), os.makedirs('./test1/a/b/c')))
+    # 与创建文件夹相反
+    logger.info('删除空文件夹： os.rmdir(./test),{}  递归删除多级空文件夹： os.removedirs(./test1/a/b/c) {}'
+                .format(os.rmdir('./test'), os.removedirs('./test1/a/b/c')))
+    logger.info('文件或文件夹重命名： os.rename(old, new)')
+    logger.info('获取文件或文件夹信息： os.stat(.)  {}'.format(os.stat('.')))
 
 
-def fileinputMoudle():
+def file_input_moudle():
     try:
         for line in fli.input(['./testfile/testfile_1', './testfile/testfile_2', './testfile/testfile_3']):
             print('{}文件内容 #{} {}'.format(fli.filename(), fli.filelineno(), line.rstrip()))
     except Exception as e:
         print(e)
     finally:
-    # print(fli.filename())
+        # print(fli.filename())
         fli.close()
 
 
-def setMoudle():
+def set_moudle():
     se = set(range(10))
     print(se)
-    set2 = set(range(5,15))
+    set2 = set(range(5, 15))
     print(se.union(set2))
     print(se & set2)
     print(se.intersection(set2))
-    se.add(frozenset(set(range(100,117,2))))
+    se.add(frozenset(set(range(100, 117, 2))))
     print(se)
 
 
-def headMoudle():
+def head_moudle():
+    # 堆
     hea = []
     data = list(range(10))
     # 随机排序列表
     shuffle(data)
     print(data)
     for n in data:
-        head.heappush(hea,n)
+        head.heappush(hea, n)
     print(hea)
     print(head.heappop(hea))
-    print(head.heappushpop(hea,11))
-    print(head.heapreplace(hea,10))
+    print(head.heappushpop(hea, 11))
+    print(head.heapreplace(hea, 10))
     print(hea)
 
 
-def quenMoudle():
+def quen_moudle():
     '''
     双端队列
     :return:
     '''
-    q = deque(range(3,17,3))
+    q = deque(range(3, 17, 3))
     q.append(2)
     q.appendleft(1)
     print(q)
@@ -75,16 +90,22 @@ def quenMoudle():
     print(q)
 
 
-def timeMoudle():
-    tup_time = time.localtime(time.time())
-    print('{}年{}月{}日 {}时{}分{}秒'.format(tup_time[0], tup_time[1], tup_time[2], tup_time[3], tup_time[4], tup_time[5]))
-    print(time.asctime())
-    print(time.mktime(tup_time))
-    print(time.strftime('%Y-%m-%d %H:%M:%S',tup_time))
-    print(time.strptime(time.asctime()))
+def time_moudle():
+    timestamp = time.time()
+    logger.info('获取当前时间戳 time.time(), {}'.format(timestamp))
+    struct_time = time.gmtime(timestamp)
+    logger.info('时间戳转换为struct_time，time.localtime(): {}, time.gmtime(): {}'
+                .format(time.localtime(timestamp), struct_time))
+    logger.info('struct_time转换为时间戳， time.mktime(): {}'.format(time.mktime(struct_time)))
+    format_time = time.strftime('%Y-%m-%d %H:%M:%S', struct_time)
+    logger.info('struct_time转换为format_time, time.strftime(): {}'.format(format_time))
+    # time.strptime()方法第二个参数为时间字符串的格式，需要赋值，默认使用%a %b %d %H:%M:%S %Y格式
+    logger.info('format_time转换为struct_time， time.strptime(): {}'.format(time.strptime(format_time, '%Y-%m-%d %H:%M:%S')))
+    logger.info('struct_time转换为%a %b %d %H:%M:%S %Y格式时间字符串, time.asctime(): {}'.format(time.asctime(struct_time)))
+    logger.info('时间戳转换为%a %b %d %H:%M:%S %Y格式时间字符串, time.ctime(): {}'.format(time.ctime(timestamp)))
 
 
-def jsonMoudle():
+def json_moudle():
     # json.
     pass
 
@@ -93,9 +114,11 @@ def main():
     # sysMoudle()
     # fileinputMoudle()
     # setMoudle()
-    # headMoudle()
+    head_moudle()
     # quenMoudle()
-    timeMoudle()
+    # time_moudle()
+    # osMoudle()
+
 
 if __name__ == '__main__':
     main()

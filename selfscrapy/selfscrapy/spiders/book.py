@@ -20,9 +20,9 @@ class BookSpider(scrapy.Spider):
 
     def parse(self, response):
 
-        a_list = response.xpath('//ul[@id="chapters-list"]/li/a')[:10]
+        a_list = response.xpath('//ul[@id="chapters-list"]/li/a')[:5]
 
-        book_loader = ItemLoader(BookInf())
+        book_loader = ItemLoader(BookInf(), response=response)
         book_loader.add_xpath('book_name', '//article/div[@class="panel-body"]/ul/li/h1/text()')
         book_loader.add_xpath('book_author', '//article/div[@class="panel-body"]/ul/li/h1/small/text()')
         book_no = re.findall('^/book/(.+?)/', a_list[0].xpath('@href').get())[0]
@@ -41,8 +41,8 @@ class BookSpider(scrapy.Spider):
             item['book_no'] = book_no
             # 使用follow方法生成新的请求，参数与request一致，但是url可以是相对URL或 scrapy.link.Link 对象，而不仅仅是绝对URL
             yield response.follow(a, meta={'item': item}, callback=self.prase_content)
-            yield scrapy.Request('https://www.boquge.com' + a.xpath('@href').get(),
-                                 meta={'item': item}, callback=self.prase_content)
+            # yield scrapy.Request('https://www.boquge.com' + a.xpath('@href').get(),
+            #                      meta={'item': item}, callback=self.prase_content)
             book_dict[book_no] += 1
 
     def prase_content(self, response):

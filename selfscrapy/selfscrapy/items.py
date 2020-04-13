@@ -6,7 +6,7 @@
 # https://docs.scrapy.org/en/latest/topics/items.html
 
 import scrapy
-from scrapy.loader.processors import MapCompose, TakeFirst
+from scrapy.loader.processors import MapCompose, TakeFirst, Compose
 from python.study.other.util import reutil
 
 
@@ -41,11 +41,12 @@ class BookInf(scrapy.Item):
 
     book_name = scrapy.Field(
         input_processor=TakeFirst(),
-        output_processor=MapCompose(book_name_process)
+        output_processor=Compose(book_name_process)
     )
 
     book_author = scrapy.Field(
-        input_processor=MapCompose(book_author_process)
+        input_processor=TakeFirst(),
+        output_processor=MapCompose(book_author_process)
     )
 
     book_no = scrapy.Field()

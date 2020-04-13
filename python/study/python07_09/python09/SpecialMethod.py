@@ -4,27 +4,27 @@
 '''
 
 
-def checkIndex(index):
+def check_index(index):
     '''
     判断index是否合法
     :param index: 指定的索引是否合法
     :return:
     '''
-    if not isinstance(index,int):
+    if not isinstance(index, int):
         raise TypeError
-    if index < 0 :
+    if index < 0:
         raise IndexError
 
 
-class noLenList:
+class NoLenList:
 
-    def __init__(self,start=0,step=1):
+    def __init__(self, start=0, step=1):
         self.start = start
         self.step = step
         self.changed = {}
 
     def __getitem__(self, item):
-        checkIndex(item)
+        check_index(item)
 
         try:
             return self.changed[item]
@@ -33,13 +33,13 @@ class noLenList:
 
     def __setitem__(self, key, value):
 
-        checkIndex(key)
+        check_index(key)
         self.changed[key] = value
 
 
 class CounterList(list):
 
-    def __init__(self,*args):
+    def __init__(self, *args):
         super().__init__(*args)
         self.counter = 0
 
@@ -50,7 +50,7 @@ class CounterList(list):
 
 def main():
 
-    s = noLenList(1, 2)
+    s = NoLenList(1, 2)
     print(s[2])
     s[3] = 9
     print(s[3])

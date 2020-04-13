@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for selfscrapy project
+# Scrapy settings for scrapystudy project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -8,27 +8,32 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+import datetime
+from os import name
+today = datetime.datetime.now()
+base_path_win = 'D://python/bookspider'
+base_path_unix = '/home/app/bookspider/'
+base_path = base_path_win
+if name is 'posix':
+    base_path = base_path_unix
 
-BOT_NAME = 'selfscrapy'
+BOT_NAME = 'scrapystudy'
 
-SPIDER_MODULES = ['selfscrapy.spiders']
-NEWSPIDER_MODULE = 'selfscrapy.spiders'
-
-# mongodb
-MONGODB_HOST = 'localhost'
-MONGODB_PORT = 27017
-MONGODB_DB = 'book'
-
-# scrapy 日志相关配置
-# 是否启用日志
-LOG_ENABLED = True
-
+SPIDER_MODULES = ['scrapystudy.spiders']
+NEWSPIDER_MODULE = 'scrapystudy.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-# USER_AGENT = 'selfscrapy (+http://www.yourdomain.com)'
+# USER_AGENT = 'scrapystudy (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
+
+# scrapy日志配置
+LOG_FILE = base_path + 'log/scrapy_{}-{}-{}.log'.format(today.year, today.month, today.day)
+LOG_ENCODING = 'utf-8'
+LOG_FORMAT = '%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: <%(message)s>'
+# 显示打印日志的组件
+LOG_SHORT_NAMES = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # CONCURRENT_REQUESTS = 32
@@ -55,15 +60,14 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-# SPIDER_MIDDLEWARES = {
-#    'selfscrapy.middlewares.PythonScrapySpiderMiddleware': 543,
-# }
+SPIDER_MIDDLEWARES = {
+   'scrapystudy.middlewares.ScrapystudySpiderMiddleware': 543,
+}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   'selfscrapy.middlewares.PythonScrapyDownloaderMiddleware': 400,
-   # 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None
+   'scrapystudy.middlewares.ScrapystudyDownloaderMiddleware': 543,
 }
 
 # Enable or disable extensions
@@ -75,8 +79,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'selfscrapy.pipelines.PythonScrapyPipeline': 300,
-   'selfscrapy.pipelines.BookPipeline': 300,
+   'scrapystudy.pipelines.ScrapystudyPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

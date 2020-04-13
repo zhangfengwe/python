@@ -32,11 +32,14 @@ def errlog(logger):
     def errlog_decorator(func):
         @wraps(func)
         def logerr(*args, **kwargs):
+            # for arg in args:
+            #     if isinstance(arg, Logger):
+            #         logger = arg().get_logger()
             try:
                 result = func(*args, **kwargs)
                 return result
             except Exception as e:
-                logger.error(traceback.format_exc())
+                traceback.format_exc()
                 raise e
         return logerr
     return errlog_decorator
@@ -55,3 +58,23 @@ def singleton(cls):
             instances[cls] = cls(*args, **kwargs)
         return instances[cls]
     return getInstance
+
+
+# 装饰器类
+class Timit:
+
+    def __init__(self, logger=None):
+        self.logger = logger
+
+    def __call__(self, func):
+        @wraps(func)
+        def timit_decorator(*args, **kwargs):
+            # 被装饰前的操作
+            result = func(*args, **kwargs)
+            # 被装饰之后的操作
+            return result
+        return timit_decorator
+
+
+if __name__ == '__main__':
+    pass

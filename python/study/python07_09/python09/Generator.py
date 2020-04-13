@@ -41,5 +41,6 @@ def main():
     li2 = list(flatten(nested2))
     print(li2)
 
+
 if __name__ == '__main__':
     main()

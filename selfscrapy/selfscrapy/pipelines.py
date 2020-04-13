@@ -28,10 +28,12 @@ class PythonScrapyPipeline(object):
             crawler.settings.get('MONGODB_DB', 'book')
         )
 
-    def close_spider(self):
+    # 重写close_spider需要参数spider
+    def close_spider(self, spider):
         self.client.close()
 
-    def open_spider(self):
+    # 重写open_spider,需要参数spider
+    def open_spider(self, spider):
         self.client = MongoClient(self.host, self.port)
         self.db = self.client[self.mongo_db]
 
